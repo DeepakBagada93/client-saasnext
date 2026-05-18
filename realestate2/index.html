@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" class="lenis lenis-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELORA Estates | Own The Extraordinary</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-main': '#F7F5F2',
+                        'bg-light': '#FAFAF8',
+                        'text-primary': '#111111',
+                        'text-secondary': '#666666',
+                        'accent-gold': '#C6A56B',
+                        'accent-warm': '#EAE3D9',
+                        'border-elegant': '#D9D9D9',
+                    },
+                    fontFamily: {
+                        'playfair': ['"Playfair Display"', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #F7F5F2;
+            color: #111111;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, .font-playfair {
+            font-family: '"Playfair Display"', serif;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        
+        /* Image hover zoom */
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom-container img {
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .text-mask {
+            overflow: hidden;
+        }
+
+        /* Lenis Smooth Scroll */
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-scroll-container] {
+            will-change: transform;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent-gold selection:text-white no-scrollbar">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 md:px-8 py-4 md:py-6 flex justify-between items-center glass transition-all duration-300" id="navbar">
+        <div class="text-2xl font-playfair font-semibold tracking-wide relative z-50">VELORA</div>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-10 text-xs uppercase tracking-widest text-text-secondary font-medium">
+            <a href="#properties" class="hover:text-accent-gold transition-colors">Residences</a>
+            <a href="#architecture" class="hover:text-accent-gold transition-colors">Architecture</a>
+            <a href="#investment" class="hover:text-accent-gold transition-colors">Investment</a>
+        </div>
+        
+        <!-- Buttons & Hamburger -->
+        <div class="flex items-center gap-4 relative z-50">
+            <button class="hidden sm:block px-6 md:px-7 py-2 md:py-2.5 border border-border-elegant rounded-full text-[10px] md:text-xs uppercase tracking-widest font-medium hover:bg-text-primary hover:text-white transition-colors duration-500 magnetic-btn">
+                Enquire
+            </button>
+            <!-- Hamburger Icon (Visible on mobile) -->
+            <button id="menu-toggle" class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none">
+                <span class="block w-6 h-px bg-text-primary transition-transform duration-300 origin-center" id="line1"></span>
+                <span class="block w-6 h-px bg-text-primary transition-opacity duration-300" id="line2"></span>
+                <span class="block w-6 h-px bg-text-primary transition-transform duration-300 origin-center" id="line3"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-bg-light/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="flex flex-col items-center space-y-8 text-xl uppercase tracking-widest font-playfair">
+            <a href="#properties" class="mobile-link hover:text-accent-gold transition-colors">Residences</a>
+            <a href="#architecture" class="mobile-link hover:text-accent-gold transition-colors">Architecture</a>
+            <a href="#investment" class="mobile-link hover:text-accent-gold transition-colors">Investment</a>
+            <button class="mobile-link mt-8 px-8 py-3 border border-text-primary rounded-full text-sm uppercase tracking-widest font-medium hover:bg-text-primary hover:text-white transition-colors duration-500">
+                Enquire Now
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. HERO SECTION -->
+    <section id="hero-horizontal" class="h-[100svh] w-full relative overflow-hidden bg-bg-light">
+        <div class="horizontal-scroll-container flex h-full w-[400vw]">
+            
+            <!-- Panel 1 -->
+            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+                <img src="images/hero1.jpg" alt="Dubai Skyline" class="absolute inset-0 w-full h-full object-cover opacity-90" data-speed="0.8">
+                <div class="absolute inset-0 bg-gradient-to-t from-bg-main/90 md:from-bg-main/80 via-transparent to-transparent"></div>
+                <div class="relative z-10 text-center px-4 w-full max-w-7xl mx-auto flex flex-col items-center mt-12 md:mt-0">
+                    <p class="text-[10px] md:text-sm uppercase tracking-[0.4em] mb-4 md:mb-6 text-text-primary drop-shadow-sm fade-up font-medium">VELORA Estates</p>
+                    <div class="text-mask">
+                        <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-playfair text-text-primary drop-shadow-sm leading-[1.1] hero-title-1">
+                            Luxury Living,<br>Redefined.
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 2 -->
+            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+                <img src="images/hero2.jpg" alt="Iconic Residence" class="absolute inset-0 w-full h-full object-cover opacity-90">
+                <div class="absolute inset-0 bg-black/10"></div>
+                <div class="relative z-10 text-center px-6">
+                    <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-playfair text-white drop-shadow-xl max-w-5xl mx-auto leading-tight">
+                        Dubai’s Most<br>Iconic Residences.
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Panel 3 -->
+            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+                <img src="images/hero3.jpg" alt="Waterfront Villa" class="absolute inset-0 w-full h-full object-cover opacity-90">
+                <div class="absolute inset-0 bg-black/10"></div>
+                <div class="relative z-10 text-center px-6">
+                    <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-playfair text-white drop-shadow-xl max-w-5xl mx-auto leading-tight">
+                        Waterfront Villas &<br>Skyline Penthouses.
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Panel 4 -->
+            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+                <img src="images/hero4.jpg" alt="Visionary Design" class="absolute inset-0 w-full h-full object-cover opacity-90">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <div class="relative z-10 text-center px-6">
+                    <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-playfair text-white drop-shadow-xl max-w-5xl mx-auto leading-tight">
+                        Designed For<br>Visionaries.
+                    </h2>
+                    <div class="mt-12 md:mt-16 fade-up">
+                        <p class="text-white/90 text-lg md:text-xl font-light mb-8 md:mb-10 max-w-xl mx-auto drop-shadow-md tracking-wide">Own The Extraordinary.</p>
+                        <a href="#properties" class="inline-block px-8 md:px-10 py-4 md:py-5 bg-white text-text-primary rounded-full hover:bg-accent-gold hover:text-white transition-all duration-500 magnetic-btn text-[10px] md:text-xs uppercase tracking-widest font-medium shadow-2xl">
+                            Explore Collection
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 2. PROPERTY SHOWCASE SECTION -->
+    <section id="properties" class="py-24 md:py-40 bg-bg-main relative z-10">
+        <div class="container mx-auto px-6 md:px-12 max-w-7xl">
+            <div class="text-center mb-20 md:mb-32 fade-up">
+                <span class="text-accent-gold uppercase tracking-[0.3em] text-[10px] md:text-xs font-semibold">The Collection</span>
+                <h2 class="text-4xl md:text-7xl font-playfair mt-4 md:mt-6">Curated Residences</h2>
+            </div>
+
+            <!-- Property 1 -->
+            <div class="flex flex-col lg:flex-row items-center gap-10 md:gap-16 lg:gap-24 mb-24 md:mb-40 property-row">
+                <div class="w-full lg:w-3/5 img-zoom-container overflow-hidden shadow-2xl shadow-black/5">
+                    <img src="images/prop1.jpg" alt="Palm Jumeirah Villa" class="w-full h-[50vh] md:h-[70vh] object-cover scale-anim">
+                </div>
+                <div class="w-full lg:w-2/5 content-reveal text-center lg:text-left">
+                    <h3 class="text-3xl md:text-5xl font-playfair mb-4 md:mb-6">Palm Jumeirah Villa</h3>
+                    <p class="text-text-secondary text-base md:text-lg mb-8 md:mb-10 font-light leading-relaxed">Experience unparalleled waterfront living with private beach access and bespoke contemporary architecture designed for the world's elite.</p>
+                    <div class="flex flex-col gap-2 mb-8 md:mb-10">
+                        <span class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] font-medium">Starting from</span>
+                        <span class="text-2xl md:text-3xl font-playfair text-accent-gold">$12,500,000</span>
+                    </div>
+                    <button class="group inline-flex items-center gap-4 md:gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-widest hover:text-accent-gold transition-colors">
+                        View Details 
+                        <span class="w-8 md:w-12 h-px bg-text-primary group-hover:bg-accent-gold transition-all group-hover:w-12 md:group-hover:w-16 duration-500"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Property 2 -->
+            <div class="flex flex-col lg:flex-row-reverse items-center gap-10 md:gap-16 lg:gap-24 mb-24 md:mb-40 property-row">
+                <div class="w-full lg:w-3/5 img-zoom-container overflow-hidden shadow-2xl shadow-black/5">
+                    <img src="images/prop2.jpg" alt="Downtown Penthouse" class="w-full h-[50vh] md:h-[70vh] object-cover scale-anim">
+                </div>
+                <div class="w-full lg:w-2/5 content-reveal text-center lg:text-left">
+                    <h3 class="text-3xl md:text-5xl font-playfair mb-4 md:mb-6">Downtown Penthouse</h3>
+                    <p class="text-text-secondary text-base md:text-lg mb-8 md:mb-10 font-light leading-relaxed">Hovering above the clouds, this exclusive penthouse offers 360-degree views of the Burj Khalifa and the city's glittering skyline.</p>
+                    <div class="flex flex-col gap-2 mb-8 md:mb-10">
+                        <span class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] font-medium">Starting from</span>
+                        <span class="text-2xl md:text-3xl font-playfair text-accent-gold">$8,900,000</span>
+                    </div>
+                    <button class="group inline-flex items-center gap-4 md:gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-widest hover:text-accent-gold transition-colors">
+                        View Details 
+                        <span class="w-8 md:w-12 h-px bg-text-primary group-hover:bg-accent-gold transition-all group-hover:w-12 md:group-hover:w-16 duration-500"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Property 3 -->
+            <div class="flex flex-col lg:flex-row items-center gap-10 md:gap-16 lg:gap-24 property-row">
+                <div class="w-full lg:w-3/5 img-zoom-container overflow-hidden shadow-2xl shadow-black/5">
+                    <img src="images/prop3.jpg" alt="Dubai Marina Residence" class="w-full h-[50vh] md:h-[70vh] object-cover scale-anim">
+                </div>
+                <div class="w-full lg:w-2/5 content-reveal text-center lg:text-left">
+                    <h3 class="text-3xl md:text-5xl font-playfair mb-4 md:mb-6">Marina Residence</h3>
+                    <p class="text-text-secondary text-base md:text-lg mb-8 md:mb-10 font-light leading-relaxed">A sanctuary of calm amidst the vibrant marina. Floor-to-ceiling glass invites the ocean in, creating a seamless indoor-outdoor experience.</p>
+                    <div class="flex flex-col gap-2 mb-8 md:mb-10">
+                        <span class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] font-medium">Starting from</span>
+                        <span class="text-2xl md:text-3xl font-playfair text-accent-gold">$5,200,000</span>
+                    </div>
+                    <button class="group inline-flex items-center gap-4 md:gap-6 text-[10px] md:text-xs font-semibold uppercase tracking-widest hover:text-accent-gold transition-colors">
+                        View Details 
+                        <span class="w-8 md:w-12 h-px bg-text-primary group-hover:bg-accent-gold transition-all group-hover:w-12 md:group-hover:w-16 duration-500"></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. ARCHITECTURE EXPERIENCE SECTION -->
+    <section id="architecture" class="py-24 md:py-40 bg-bg-light relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 max-w-7xl relative">
+            
+            <div class="max-w-4xl mb-20 md:mb-32 fade-up text-center md:text-left">
+                <span class="text-accent-gold uppercase tracking-[0.3em] text-[10px] md:text-xs font-semibold">The Vision</span>
+                <h2 class="text-4xl md:text-7xl font-playfair mt-4 md:mt-6 mb-6 md:mb-8">Architectural Excellence</h2>
+                <p class="text-lg md:text-2xl text-text-secondary font-light leading-relaxed">We collaborate with the world’s most visionary architects to create homes that are not just lived in, but experienced. Every line, shadow, and material is curated for supreme elegance.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-0 md:gap-8 relative architecture-grid">
+                <!-- Large Image -->
+                <div class="md:col-span-8 img-zoom-container overflow-hidden shadow-2xl shadow-black/5" data-speed="0.95">
+                    <img src="images/arch1.jpg" alt="Architecture Details" class="w-full h-[50vh] md:h-[80vh] object-cover">
+                </div>
+                
+                <!-- Floating Text Box -->
+                <div class="md:col-span-5 flex flex-col justify-center relative -mt-12 mx-4 md:mx-0 md:-ml-24 md:mt-24 z-10 p-8 md:p-12 lg:p-16 glass shadow-xl arch-text-box" data-speed="1.1">
+                    <h4 class="text-2xl md:text-3xl font-playfair mb-6 md:mb-8">Bespoke Interiors</h4>
+                    <ul class="space-y-6 md:space-y-8">
+                        <li class="flex items-start gap-4 md:gap-6">
+                            <div class="w-1.5 h-1.5 rounded-full bg-accent-gold mt-2 md:mt-2.5 shrink-0"></div>
+                            <div>
+                                <h5 class="font-medium text-base md:text-lg">Floor-to-Ceiling Windows</h5>
+                                <p class="text-text-secondary text-xs md:text-sm font-light mt-1 md:mt-2 leading-relaxed">Maximizing natural light and framing iconic cityscapes.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 md:gap-6">
+                            <div class="w-1.5 h-1.5 rounded-full bg-accent-gold mt-2 md:mt-2.5 shrink-0"></div>
+                            <div>
+                                <h5 class="font-medium text-base md:text-lg">Smart Home Integration</h5>
+                                <p class="text-text-secondary text-xs md:text-sm font-light mt-1 md:mt-2 leading-relaxed">Invisible technology designed for effortless living.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 md:gap-6">
+                            <div class="w-1.5 h-1.5 rounded-full bg-accent-gold mt-2 md:mt-2.5 shrink-0"></div>
+                            <div>
+                                <h5 class="font-medium text-base md:text-lg">Resort-Inspired Amenities</h5>
+                                <p class="text-text-secondary text-xs md:text-sm font-light mt-1 md:mt-2 leading-relaxed">Private spas, pools, and exclusively curated lounges.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Small Image offset -->
+                <div class="hidden md:block md:col-span-6 md:col-start-7 md:-mt-32 img-zoom-container overflow-hidden shadow-2xl shadow-black/5" data-speed="1.05">
+                    <img src="images/arch2.jpg" alt="Spa Bathroom" class="w-full h-[60vh] object-cover">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. HORIZONTAL PROPERTY GALLERY -->
+    <section id="gallery-horizontal" class="h-[70svh] md:h-screen w-full relative overflow-hidden bg-bg-main py-12 md:py-20 border-t border-border-elegant/30">
+        <div class="absolute top-6 left-6 md:top-16 md:left-16 z-10 px-0 mb-0">
+            <span class="text-accent-gold uppercase tracking-[0.3em] text-[10px] md:text-xs font-semibold">Discover</span>
+            <h2 class="text-3xl md:text-4xl font-playfair mt-2">The Lifestyle</h2>
+        </div>
+        
+        <div class="gallery-scroll-container flex items-center h-full w-[350vw] sm:w-[250vw] md:w-[200vw] gap-6 md:gap-12 px-6 md:px-16 pb-0 pt-16 md:pt-20">
+            
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+                <img src="images/hero4.jpg" class="w-full h-full object-cover">
+                <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
+                    <p class="font-playfair text-lg md:text-xl">Living Spaces</p>
+                </div>
+            </div>
+
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+                <img src="images/hero3.jpg" class="w-full h-full object-cover">
+                <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
+                    <p class="font-playfair text-lg md:text-xl">Infinity Pools</p>
+                </div>
+            </div>
+
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+                <img src="images/prop2.jpg" class="w-full h-full object-cover">
+                <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
+                    <p class="font-playfair text-lg md:text-xl">Skyline Balconies</p>
+                </div>
+            </div>
+
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+                <img src="images/arch2.jpg" class="w-full h-full object-cover">
+                <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
+                    <p class="font-playfair text-lg md:text-xl">Spa Bathrooms</p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 5. INVESTMENT SECTION -->
+    <section id="investment" class="py-24 md:py-40 bg-bg-light border-y border-border-elegant/30">
+        <div class="container mx-auto px-6 md:px-12 max-w-7xl">
+            <div class="text-center mb-16 md:mb-24 fade-up">
+                <span class="text-accent-gold uppercase tracking-[0.3em] text-[10px] md:text-xs font-semibold">Opportunity</span>
+                <h2 class="text-4xl md:text-6xl font-playfair mt-4 md:mt-6 mb-4 md:mb-6">Why Invest in Dubai?</h2>
+                <p class="text-base md:text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">A secure, tax-free environment with unmatched rental yields and capital appreciation potential.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                <!-- Card 1 -->
+                <div class="glass p-8 md:p-10 text-center stat-card hover:-translate-y-2 md:hover:-translate-y-3 transition-transform duration-700 shadow-xl shadow-black/5">
+                    <div class="text-5xl md:text-6xl font-playfair text-accent-gold mb-4 md:mb-6 counter" data-target="0">0%</div>
+                    <h4 class="text-lg md:text-xl font-medium mb-2 md:mb-3">Tax-Free</h4>
+                    <p class="text-xs md:text-sm text-text-secondary font-light leading-relaxed">Zero property or income tax on your investments.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass p-8 md:p-10 text-center stat-card hover:-translate-y-2 md:hover:-translate-y-3 transition-transform duration-700 shadow-xl shadow-black/5 lg:mt-12">
+                    <div class="text-5xl md:text-6xl font-playfair text-accent-gold mb-4 md:mb-6 counter" data-target="8">0%</div>
+                    <h4 class="text-lg md:text-xl font-medium mb-2 md:mb-3">High ROI</h4>
+                    <p class="text-xs md:text-sm text-text-secondary font-light leading-relaxed">Average 8-10% rental returns, outperforming global markets.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass p-8 md:p-10 text-center stat-card hover:-translate-y-2 md:hover:-translate-y-3 transition-transform duration-700 shadow-xl shadow-black/5">
+                    <div class="text-5xl md:text-6xl font-playfair text-accent-gold mb-4 md:mb-6 counter" data-target="10">0</div>
+                    <h4 class="text-lg md:text-xl font-medium mb-2 md:mb-3">Golden Visa</h4>
+                    <p class="text-xs md:text-sm text-text-secondary font-light leading-relaxed">Eligibility for 10-year UAE residency on premium properties.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="glass p-8 md:p-10 text-center stat-card hover:-translate-y-2 md:hover:-translate-y-3 transition-transform duration-700 shadow-xl shadow-black/5 lg:mt-12">
+                    <div class="text-5xl md:text-6xl font-playfair text-accent-gold mb-4 md:mb-6">#1</div>
+                    <h4 class="text-lg md:text-xl font-medium mb-2 md:mb-3">Global Hub</h4>
+                    <p class="text-xs md:text-sm text-text-secondary font-light leading-relaxed">The fastest growing wealth center for high-net-worth individuals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. TESTIMONIAL SECTION -->
+    <section class="py-24 md:py-40 bg-bg-main relative">
+        <div class="container mx-auto px-6 md:px-12 max-w-7xl">
+            <h2 class="text-4xl md:text-5xl font-playfair text-center mb-16 md:mb-24 fade-up">Voices of Our Residents</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                <!-- Testimonial 1 -->
+                <div class="glass p-8 md:p-12 relative fade-up shadow-xl shadow-black/5">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-accent-gold/20 absolute top-6 md:top-8 left-6 md:left-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    <p class="text-lg md:text-xl font-playfair italic mb-8 md:mb-10 relative z-10 pt-4 md:pt-6 text-text-secondary leading-relaxed">"The level of detail and minimalist elegance is breathtaking. VELORA didn't just sell us a home; they provided an entry into an exquisite lifestyle."</p>
+                    <div class="flex items-center gap-4 md:gap-5">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-accent-warm rounded-full"></div>
+                        <div>
+                            <h5 class="font-medium text-base md:text-lg">Elena Rostova</h5>
+                            <p class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] mt-1">International Investor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="glass p-8 md:p-12 relative fade-up shadow-xl shadow-black/5" style="transition-delay: 150ms;">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-accent-gold/20 absolute top-6 md:top-8 left-6 md:left-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    <p class="text-lg md:text-xl font-playfair italic mb-8 md:mb-10 relative z-10 pt-4 md:pt-6 text-text-secondary leading-relaxed">"Seamless buying process and a property that exceeds expectations. The waterfront views and architectural design are simply world-class."</p>
+                    <div class="flex items-center gap-4 md:gap-5">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-accent-warm rounded-full"></div>
+                        <div>
+                            <h5 class="font-medium text-base md:text-lg">James & Sarah Chen</h5>
+                            <p class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] mt-1">Homeowners</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="glass p-8 md:p-12 relative fade-up shadow-xl shadow-black/5" style="transition-delay: 300ms;">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-accent-gold/20 absolute top-6 md:top-8 left-6 md:left-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                    <p class="text-lg md:text-xl font-playfair italic mb-8 md:mb-10 relative z-10 pt-4 md:pt-6 text-text-secondary leading-relaxed">"Finding a property that balances modern minimal design with ultimate luxury was hard until we discovered VELORA Estates."</p>
+                    <div class="flex items-center gap-4 md:gap-5">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-accent-warm rounded-full"></div>
+                        <div>
+                            <h5 class="font-medium text-base md:text-lg">Marcus Sterling</h5>
+                            <p class="text-[10px] md:text-xs text-text-secondary uppercase tracking-[0.2em] mt-1">Architecture Enthusiast</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. FINAL CTA SECTION -->
+    <section class="py-32 md:py-48 relative overflow-hidden flex items-center justify-center px-6">
+        <!-- Animated Background Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-br from-bg-main via-accent-warm/30 to-bg-light z-0 cta-bg"></div>
+        <div class="absolute inset-0 bg-[url('images/hero1.jpg')] bg-cover bg-center opacity-[0.04] mix-blend-multiply z-0"></div>
+        
+        <div class="container mx-auto text-center relative z-10 max-w-4xl">
+            <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-playfair mb-10 md:mb-12 cta-title leading-tight">Your Future Address<br>Starts Here.</h2>
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center cta-buttons mt-8 md:mt-12">
+                <button class="px-8 md:px-10 py-4 md:py-5 bg-text-primary text-white rounded-full hover:bg-accent-gold transition-colors duration-500 text-[10px] md:text-xs uppercase tracking-widest font-semibold shadow-2xl w-full sm:w-auto">
+                    Schedule Consultation
+                </button>
+                <button class="px-8 md:px-10 py-4 md:py-5 bg-transparent border border-text-primary text-text-primary rounded-full hover:bg-white transition-colors duration-500 text-[10px] md:text-xs uppercase tracking-widest font-semibold w-full sm:w-auto">
+                    Explore Residences
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. FOOTER -->
+    <footer class="bg-white pt-24 md:pt-32 pb-8 md:pb-12 border-t border-border-elegant/40">
+        <div class="container mx-auto px-6 md:px-12 max-w-7xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-24">
+                <div class="md:col-span-2">
+                    <h3 class="text-3xl md:text-4xl font-playfair mb-6 md:mb-8">VELORA</h3>
+                    <p class="text-text-secondary text-base md:text-lg font-light max-w-md mb-8 md:mb-10 leading-relaxed">Curating Dubai's most extraordinary residential experiences for those who appreciate architectural excellence and premium living.</p>
+                    <div class="flex gap-4">
+                        <!-- Social Icons -->
+                        <a href="#" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-border-elegant flex items-center justify-center hover:bg-bg-main hover:border-text-primary transition-all duration-300">
+                            <span class="sr-only">Instagram</span>
+                            <svg class="w-4 h-4 md:w-5 md:h-5 text-text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-border-elegant flex items-center justify-center hover:bg-bg-main hover:border-text-primary transition-all duration-300">
+                            <span class="sr-only">LinkedIn</span>
+                            <svg class="w-4 h-4 md:w-5 md:h-5 text-text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5 class="uppercase tracking-[0.2em] text-[10px] md:text-xs font-semibold mb-6 md:mb-8 text-text-primary">Properties</h5>
+                    <ul class="space-y-4 md:space-y-5 text-xs md:text-sm text-text-secondary font-light">
+                        <li><a href="#" class="hover:text-accent-gold transition-colors">Palm Jumeirah</a></li>
+                        <li><a href="#" class="hover:text-accent-gold transition-colors">Downtown Dubai</a></li>
+                        <li><a href="#" class="hover:text-accent-gold transition-colors">Dubai Marina</a></li>
+                        <li><a href="#" class="hover:text-accent-gold transition-colors">Emirates Hills</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="uppercase tracking-[0.2em] text-[10px] md:text-xs font-semibold mb-6 md:mb-8 text-text-primary">Contact</h5>
+                    <ul class="space-y-4 md:space-y-5 text-xs md:text-sm text-text-secondary font-light">
+                        <li>VELORA Estates L.L.C</li>
+                        <li>Boulevard Plaza, Tower 1</li>
+                        <li>Downtown Dubai, UAE</li>
+                        <li class="pt-2"><a href="mailto:info@velora.com" class="hover:text-accent-gold transition-colors">info@velora.com</a></li>
+                        <li>+971 4 123 4567</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 md:pt-10 border-t border-border-elegant/40 text-[10px] md:text-xs text-text-secondary font-light">
+                <p>&copy; 2026 VELORA Estates. All rights reserved.</p>
+                <div class="flex gap-6 md:gap-8 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-text-primary transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP & Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+
+    <script>
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Initialize Lenis
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // Navbar blur and resize on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.replace('py-4', 'py-3');
+                navbar.classList.replace('md:py-6', 'md:py-4');
+                navbar.classList.replace('px-6', 'px-8');
+                navbar.classList.replace('md:px-8', 'md:px-10');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.replace('py-3', 'py-4');
+                navbar.classList.replace('md:py-4', 'md:py-6');
+                navbar.classList.replace('px-8', 'px-6');
+                navbar.classList.replace('md:px-10', 'md:px-8');
+            }
+        });
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            if(menuOpen) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                line1.classList.add('translate-y-[7px]', 'rotate-45');
+                line2.classList.add('opacity-0');
+                line3.classList.add('-translate-y-[7px]', '-rotate-45');
+                lenis.stop(); // Prevent scrolling when menu is open
+            } else {
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                line1.classList.remove('translate-y-[7px]', 'rotate-45');
+                line2.classList.remove('opacity-0');
+                line3.classList.remove('-translate-y-[7px]', '-rotate-45');
+                lenis.start();
+            }
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+
+        // 1. HERO HORIZONTAL SCROLL (ALL DEVICES)
+        const heroSection = document.getElementById('hero-horizontal');
+        const heroContainer = document.querySelector('.horizontal-scroll-container');
+        const heroPanels = gsap.utils.toArray('.hero-panel');
+
+        if(heroSection && heroContainer && heroPanels.length) {
+            gsap.to(heroPanels, {
+                xPercent: -100 * (heroPanels.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: heroSection,
+                    pin: true,
+                    scrub: 1,
+                    snap: {
+                        snapTo: 1 / (heroPanels.length - 1),
+                        duration: {min: 0.2, max: 0.6},
+                        delay: 0.1,
+                        ease: "power2.inOut"
+                    },
+                    end: () => "+=" + heroContainer.offsetWidth
+                }
+            });
+        }
+
+        // 4. GALLERY HORIZONTAL SCROLL (ALL DEVICES)
+        const gallerySection = document.getElementById('gallery-horizontal');
+        const galleryContainer = document.querySelector('.gallery-scroll-container');
+        const galleryItems = gsap.utils.toArray('.gallery-item');
+
+        if(gallerySection && galleryContainer && galleryItems.length) {
+            gsap.to(galleryItems, {
+                xPercent: -100 * (galleryItems.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: gallerySection,
+                    pin: true,
+                    scrub: 1.5,
+                    end: () => "+=" + (galleryContainer.offsetWidth / 1.5)
+                }
+            });
+        }
+
+        // Initial Hero Animation
+        gsap.from(".hero-title-1", {
+            y: 100,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power4.out",
+            delay: 0.2
+        });
+
+        heroPanels.forEach((panel, i) => {
+            if(i === 0) return; // Skip first image
+            const img = panel.querySelector('img');
+            if(img) {
+                gsap.fromTo(img, 
+                    { xPercent: -15 },
+                    { 
+                        xPercent: 15,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: panel,
+                            containerAnimation: gsap.getById(heroSection),
+                            start: "left right",
+                            end: "right left",
+                            scrub: true
+                        }
+                    }
+                );
+            }
+        });
+
+        // Global Fade Up Elements
+        gsap.utils.toArray('.fade-up').forEach(elem => {
+            gsap.from(elem, {
+                y: 50,
+                opacity: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Property Showcase Animations
+        gsap.utils.toArray('.property-row').forEach(row => {
+            const img = row.querySelector('.scale-anim');
+            const content = row.querySelector('.content-reveal');
+            
+            if(img) {
+                gsap.from(img, {
+                    scale: 1.15,
+                    duration: 1.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: row,
+                        start: "top 80%",
+                    }
+                });
+            }
+
+            if(content && content.children) {
+                gsap.from(content.children, {
+                    y: 40,
+                    opacity: 0,
+                    duration: 1.2,
+                    stagger: 0.15,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: row,
+                        start: "top 75%",
+                    }
+                });
+            }
+        });
+
+        // Architecture Parallax (Desktop Only to prevent overflow on mobile)
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 768px)", () => {
+            gsap.utils.toArray('[data-speed]').forEach(elem => {
+                const speed = parseFloat(elem.getAttribute('data-speed'));
+                gsap.to(elem, {
+                    y: () => (1 - speed) * ScrollTrigger.maxScroll(window),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: document.body,
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: 1.5
+                    }
+                });
+            });
+            
+            // Magnetic Buttons Logic (Desktop Only)
+            const magneticBtns = document.querySelectorAll('.magnetic-btn');
+            magneticBtns.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    gsap.to(btn, {
+                        x: x * 0.4,
+                        y: y * 0.4,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.8,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+        });
+
+        // Investment Counters
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const suffix = counter.innerText.replace(/[0-9]/g, '');
+            
+            ScrollTrigger.create({
+                trigger: counter,
+                start: "top 85%",
+                once: true,
+                onEnter: () => {
+                    gsap.to(counter, {
+                        innerHTML: target,
+                        duration: 2.5,
+                        snap: { innerHTML: 1 },
+                        ease: "power3.out",
+                        onUpdate: function() {
+                            counter.innerHTML = Math.round(this.targets()[0].innerHTML) + suffix;
+                        }
+                    });
+                }
+            });
+        });
+
+        // Final CTA Animation
+        const ctaBg = document.querySelector('.cta-bg');
+        if(ctaBg) {
+            gsap.to(ctaBg, {
+                backgroundPosition: "100% 100%",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".cta-title",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1.5
+                }
+            });
+        }
+
+        gsap.from(".cta-title", {
+            y: 60,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".cta-title",
+                start: "top 80%"
+            }
+        });
+
+        gsap.from(".cta-buttons", {
+            y: 40,
+            opacity: 0,
+            duration: 1.2,
+            delay: 0.4,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".cta-title",
+                start: "top 80%"
+            }
+        });
+    </script>
+</body>
+</html>
