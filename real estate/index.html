@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELORA Estates | Own the Skyline</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.32/dist/lenis.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#050505',
+                        light: '#FFFFFF',
+                        muted: '#A1A1AA',
+                        gold: '#C8A46B',
+                        glass: 'rgba(255, 255, 255, 0.03)',
+                        glassBorder: 'rgba(255, 255, 255, 0.08)'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Lenis Smooth Scrolling */
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        /* Custom Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .cursor-light {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(200, 164, 107, 0.08) 0%, rgba(0,0,0,0) 60%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            mix-blend-mode: screen;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .clip-text {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-image: linear-gradient(to right, #FFFFFF, #A1A1AA);
+        }
+        
+        .gold-gradient-text {
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-image: linear-gradient(to right, #C8A46B, #e3c89b);
+        }
+
+        .img-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .img-wrap img {
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .group:hover .img-wrap img {
+            transform: scale(1.05);
+        }
+
+        .btn-magnetic {
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.4s ease, color 0.4s ease;
+        }
+        
+        .btn-magnetic::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        .btn-magnetic:hover::before {
+            top: 0;
+        }
+
+        .btn-magnetic:hover {
+            color: #050505;
+        }
+        
+        /* Text Split Animation Setup */
+        .word {
+            display: inline-flex;
+            overflow: hidden;
+        }
+        .char {
+            display: inline-block;
+            transform: translateY(100%);
+        }
+
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .horizontal-scroll-container {
+            width: 300vw; /* 3 panels */
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .panel {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader">
+        <h1 class="font-serif text-3xl tracking-widest text-white/50 animate-pulse">VELORA</h1>
+        <div class="w-48 h-[1px] bg-white/10 mt-6 relative overflow-hidden">
+            <div class="absolute top-0 left-0 h-full bg-gold w-0" id="loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- Cursor Follower -->
+    <div class="cursor-light" id="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 top-0 px-6 md:px-16 py-6 md:py-8 flex justify-between items-center mix-blend-difference">
+        <div class="font-serif text-xl md:text-2xl tracking-[0.2em] uppercase font-light">
+            Velora
+        </div>
+        <div class="hidden md:flex gap-12 text-sm uppercase tracking-widest font-sans font-light">
+            <a href="#properties" class="hover:text-gold transition-colors">Properties</a>
+            <a href="#lifestyle" class="hover:text-gold transition-colors">Lifestyle</a>
+            <a href="#investment" class="hover:text-gold transition-colors">Investment</a>
+        </div>
+        <button id="menu-btn" class="font-sans text-[10px] md:text-xs uppercase tracking-widest border border-white/20 px-4 py-2 md:px-6 md:py-3 rounded-full hover:bg-white hover:text-dark transition-all duration-300">
+            Menu
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-dark z-50 flex flex-col justify-center items-center -translate-y-full">
+        <button id="close-menu-btn" class="absolute top-6 right-6 md:top-8 md:right-16 font-sans text-[10px] md:text-xs uppercase tracking-widest border border-white/20 px-4 py-2 md:px-6 md:py-3 rounded-full hover:bg-white hover:text-dark transition-all duration-300">
+            Close
+        </button>
+        <div class="flex flex-col gap-8 text-center text-3xl font-serif font-light">
+            <a href="#properties" class="mobile-link hover:text-gold transition-colors">Properties</a>
+            <a href="#lifestyle" class="mobile-link hover:text-gold transition-colors">Lifestyle</a>
+            <a href="#investment" class="mobile-link hover:text-gold transition-colors">Investment</a>
+            <a href="#contact" class="mobile-link hover:text-gold transition-colors mt-8 text-sm uppercase tracking-widest font-sans font-normal border-b border-gold pb-1">Contact Us</a>
+        </div>
+    </div>
+
+    <main>
+        <!-- 1. HERO SECTION -->
+        <section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0 scale-110" id="hero-bg">
+                <img src="./assets/dubai_hero.png" alt="Dubai Skyline" class="w-full h-full object-cover opacity-70">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent"></div>
+                <div class="absolute inset-0 bg-dark/30 backdrop-blur-[2px]"></div>
+            </div>
+
+            <!-- Particles (Simulated with simple CSS divs in a real app, here just an overlay) -->
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvc3ZnPg==')] opacity-50 z-0"></div>
+
+            <div class="relative z-10 container mx-auto px-6 md:px-16 flex flex-col items-center text-center mt-20">
+                <p class="font-sans text-gold tracking-[0.3em] uppercase text-xs md:text-sm mb-6 fade-up">Own the Skyline.</p>
+                <h1 class="font-serif text-4xl md:text-7xl lg:text-[7rem] leading-[1.1] mb-8 split-text max-w-5xl mx-auto">
+                    Own Dubai's Most <br><span class="italic font-light">Iconic</span> Addresses.
+                </h1>
+                <p class="font-sans text-muted font-light max-w-lg mx-auto text-sm md:text-base leading-relaxed mb-12 fade-up">
+                    Ultra-luxury residences, waterfront penthouses, and exclusive investment opportunities in the heart of Dubai.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 fade-up w-full sm:w-auto">
+                    <a href="#properties" class="btn-magnetic w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 border border-white/20 text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans text-center">
+                        Explore Properties
+                    </a>
+                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-dark text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans hover:bg-gold transition-colors duration-300 text-center">
+                        Book Private Viewing
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 fade-up">
+                <span class="text-[10px] uppercase tracking-widest text-muted">Scroll</span>
+                <div class="w-[1px] h-12 bg-white/20 overflow-hidden">
+                    <div class="w-full h-full bg-white origin-top animate-[scrolldown_1.5s_ease-in-out_infinite]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. FEATURED PROPERTY SHOWCASE -->
+        <section id="properties" class="py-24 md:py-32 bg-dark relative z-10">
+            <div class="container mx-auto px-6 md:px-16 mb-16 md:mb-24">
+                <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl max-w-2xl leading-tight text-reveal">
+                    Curated For The <span class="text-muted italic">Elite.</span>
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-24 md:gap-48">
+                <!-- Property 1 -->
+                <div class="property-card container mx-auto px-6 md:px-16 flex flex-col md:flex-row items-center gap-8 lg:gap-24 group">
+                    <div class="w-full md:w-3/5 img-wrap aspect-[4/3] md:aspect-[16/10]">
+                        <img src="./assets/palm_villa.png" alt="Palm Jumeirah Villa" class="w-full h-full object-cover parallax-img">
+                    </div>
+                    <div class="w-full md:w-2/5 flex flex-col justify-center">
+                        <span class="text-gold text-[10px] md:text-xs tracking-widest uppercase mb-4">Palm Jumeirah</span>
+                        <h3 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">Signature Villa</h3>
+                        <p class="text-muted font-light leading-relaxed mb-8 text-sm md:text-base">
+                            An architectural masterpiece situated on the fronds of Palm Jumeirah. Featuring private beach access, infinity pool, and unobstructed sunset views of the Dubai Marina skyline.
+                        </p>
+                        <div class="flex justify-between items-center border-t border-white/10 pt-6 mb-8">
+                            <div>
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Starting Price</span>
+                                <span class="font-serif text-lg md:text-xl">$18,500,000</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Size</span>
+                                <span class="font-serif text-lg md:text-xl">12,000 sq ft</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center gap-4 text-[10px] md:text-xs uppercase tracking-widest hover:text-gold transition-colors w-max">
+                            View Residence <span class="w-6 md:w-8 h-[1px] bg-current"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Property 2 -->
+                <div class="property-card container mx-auto px-6 md:px-16 flex flex-col md:flex-row-reverse items-center gap-8 lg:gap-24 group">
+                    <div class="w-full md:w-3/5 img-wrap aspect-[4/3] md:aspect-[16/10]">
+                        <img src="./assets/downtown_penthouse.png" alt="Downtown Penthouse" class="w-full h-full object-cover parallax-img">
+                    </div>
+                    <div class="w-full md:w-2/5 flex flex-col justify-center">
+                        <span class="text-gold text-[10px] md:text-xs tracking-widest uppercase mb-4">Downtown Dubai</span>
+                        <h3 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">Sky Penthouse</h3>
+                        <p class="text-muted font-light leading-relaxed mb-8 text-sm md:text-base">
+                            Ultra-luxury living above the clouds. Floor-to-ceiling windows offering panoramic views of the Burj Khalifa and the Dubai Fountains. Custom minimal interiors.
+                        </p>
+                        <div class="flex justify-between items-center border-t border-white/10 pt-6 mb-8">
+                            <div>
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Starting Price</span>
+                                <span class="font-serif text-lg md:text-xl">$22,000,000</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Size</span>
+                                <span class="font-serif text-lg md:text-xl">8,500 sq ft</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center gap-4 text-[10px] md:text-xs uppercase tracking-widest hover:text-gold transition-colors w-max">
+                            View Residence <span class="w-6 md:w-8 h-[1px] bg-current"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Property 3 -->
+                <div class="property-card container mx-auto px-6 md:px-16 flex flex-col md:flex-row items-center gap-8 lg:gap-24 group">
+                    <div class="w-full md:w-3/5 img-wrap aspect-[4/3] md:aspect-[16/10]">
+                        <img src="./assets/emirates_mansion.png" alt="Emirates Hills Mansion" class="w-full h-full object-cover parallax-img">
+                    </div>
+                    <div class="w-full md:w-2/5 flex flex-col justify-center">
+                        <span class="text-gold text-[10px] md:text-xs tracking-widest uppercase mb-4">Emirates Hills</span>
+                        <h3 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">The Royal Estate</h3>
+                        <p class="text-muted font-light leading-relaxed mb-8 text-sm md:text-base">
+                            A massive modern mansion in Dubai's most exclusive gated community. Overlooking the golf course, featuring dramatic cinematic lighting, a huge pool, and sprawling gardens.
+                        </p>
+                        <div class="flex justify-between items-center border-t border-white/10 pt-6 mb-8">
+                            <div>
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Starting Price</span>
+                                <span class="font-serif text-lg md:text-xl">$45,000,000</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-[10px] uppercase tracking-widest text-muted mb-1">Size</span>
+                                <span class="font-serif text-lg md:text-xl">25,000 sq ft</span>
+                            </div>
+                        </div>
+                        <a href="#" class="inline-flex items-center gap-4 text-[10px] md:text-xs uppercase tracking-widest hover:text-gold transition-colors w-max">
+                            View Residence <span class="w-6 md:w-8 h-[1px] bg-current"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LIFESTYLE EXPERIENCE -->
+        <section id="lifestyle" class="h-screen w-full relative overflow-hidden bg-dark">
+            <div class="horizontal-scroll-container">
+                <!-- Panel 1 -->
+                <div class="panel">
+                    <div class="absolute inset-0">
+                        <img src="./assets/infinity_pool.png" alt="Waterfront Living" class="w-full h-full object-cover opacity-60 horiz-img">
+                        <div class="absolute inset-0 bg-dark/40"></div>
+                    </div>
+                    <div class="relative z-10 container mx-auto px-6 md:px-16 flex flex-col justify-center h-full">
+                        <p class="text-gold text-[10px] md:text-sm tracking-[0.3em] uppercase mb-4 md:mb-6">01 — The Experience</p>
+                        <h2 class="font-serif text-5xl md:text-7xl mb-6 md:mb-8 leading-tight">Waterfront <br><span class="italic font-light">Living.</span></h2>
+                        <p class="text-muted text-sm md:text-lg max-w-md font-light leading-relaxed">Wake up to the gentle sound of the Arabian Gulf. Private beaches, infinity pools, and exclusive yacht access.</p>
+                    </div>
+                </div>
+                <!-- Panel 2 -->
+                <div class="panel">
+                    <div class="absolute inset-0">
+                        <img src="./assets/marina_residence.png" alt="Skyline Views" class="w-full h-full object-cover opacity-60 horiz-img">
+                        <div class="absolute inset-0 bg-dark/40"></div>
+                    </div>
+                    <div class="relative z-10 container mx-auto px-6 md:px-16 flex flex-col justify-center h-full">
+                        <p class="text-gold text-[10px] md:text-sm tracking-[0.3em] uppercase mb-4 md:mb-6">02 — The View</p>
+                        <h2 class="font-serif text-5xl md:text-7xl mb-6 md:mb-8 leading-tight">Skyline <br><span class="italic font-light">Panoramas.</span></h2>
+                        <p class="text-muted text-sm md:text-lg max-w-md font-light leading-relaxed">Unrivaled perspectives of the world's most dynamic city from your private glass balcony.</p>
+                    </div>
+                </div>
+                <!-- Panel 3 -->
+                <div class="panel">
+                    <div class="absolute inset-0">
+                        <img src="./assets/luxury_interior.png" alt="Smart Home" class="w-full h-full object-cover opacity-60 horiz-img">
+                        <div class="absolute inset-0 bg-dark/40"></div>
+                    </div>
+                    <div class="relative z-10 container mx-auto px-6 md:px-16 flex flex-col justify-center h-full">
+                        <p class="text-gold text-[10px] md:text-sm tracking-[0.3em] uppercase mb-4 md:mb-6">03 — The Technology</p>
+                        <h2 class="font-serif text-5xl md:text-7xl mb-6 md:mb-8 leading-tight">Smart Home <br><span class="italic font-light">Integration.</span></h2>
+                        <p class="text-muted text-sm md:text-lg max-w-md font-light leading-relaxed">Control your entire environment with a touch. Atmospheric lighting, climate control, and security at your fingertips.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. INVESTMENT SECTION -->
+        <section id="investment" class="py-24 md:py-32 relative bg-[#0a0a0a]">
+            <!-- Decorative background glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[800px] md:h-[800px] bg-gold/5 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 md:px-16 relative z-10">
+                <div class="text-center mb-16 md:mb-24">
+                    <span class="text-gold text-[10px] md:text-xs tracking-[0.3em] uppercase mb-4 block">Why Dubai</span>
+                    <h2 class="font-serif text-3xl md:text-6xl max-w-3xl mx-auto leading-tight text-reveal">
+                        The Future Of <br><span class="text-muted italic">Luxury Investment.</span>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-panel p-8 md:p-10 flex flex-col items-start stat-card">
+                        <span class="text-gold mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        </span>
+                        <h4 class="font-serif text-4xl md:text-5xl mb-2"><span class="counter" data-target="8">0</span>%</h4>
+                        <p class="text-xs md:text-sm tracking-widest uppercase text-white mb-2">Avg. Annual ROI</p>
+                        <p class="text-muted text-[10px] md:text-xs font-light">High rental yields compared to global capitals.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 flex flex-col items-start stat-card">
+                        <span class="text-gold mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </span>
+                        <h4 class="font-serif text-4xl md:text-5xl mb-2"><span class="counter" data-target="0">0</span>%</h4>
+                        <p class="text-xs md:text-sm tracking-widest uppercase text-white mb-2">Income Tax</p>
+                        <p class="text-muted text-[10px] md:text-xs font-light">100% tax-free residential property ownership.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 flex flex-col items-start stat-card">
+                        <span class="text-gold mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </span>
+                        <h4 class="font-serif text-4xl md:text-5xl mb-2"><span class="counter" data-target="10">0</span>Y</h4>
+                        <p class="text-xs md:text-sm tracking-widest uppercase text-white mb-2">Golden Visa</p>
+                        <p class="text-muted text-[10px] md:text-xs font-light">Long-term residency for major property investors.</p>
+                    </div>
+
+                    <div class="glass-panel p-8 md:p-10 flex flex-col items-start stat-card">
+                        <span class="text-gold mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </span>
+                        <h4 class="font-serif text-4xl md:text-5xl mb-2"><span class="counter" data-target="1">0</span>M+</h4>
+                        <p class="text-xs md:text-sm tracking-widest uppercase text-white mb-2">High Demand</p>
+                        <p class="text-muted text-[10px] md:text-xs font-light">Growing influx of HNWIs moving to Dubai.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PROPERTY GALLERY (MASONRY) -->
+        <section class="py-24 md:py-32 bg-dark">
+            <div class="container mx-auto px-6 md:px-16">
+                <div class="mb-10 md:mb-16 flex justify-between items-end">
+                    <h2 class="font-serif text-3xl md:text-5xl">The <span class="italic font-light">Details.</span></h2>
+                    <a href="#" class="hidden md:inline-flex items-center gap-4 text-xs uppercase tracking-widest hover:text-gold transition-colors">
+                        View Full Gallery <span class="w-8 h-[1px] bg-current"></span>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 auto-rows-[250px] md:auto-rows-[300px]">
+                    <div class="md:col-span-8 img-wrap group">
+                        <img src="./assets/luxury_interior.png" alt="Interior" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:col-span-4 img-wrap group">
+                        <img src="./assets/downtown_penthouse.png" alt="Penthouse" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:col-span-5 img-wrap group">
+                        <img src="./assets/infinity_pool.png" alt="Pool" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:col-span-7 img-wrap group">
+                        <img src="./assets/emirates_mansion.png" alt="Mansion" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center md:hidden">
+                     <a href="#" class="inline-flex items-center gap-4 text-[10px] uppercase tracking-widest hover:text-gold transition-colors">
+                        View Full Gallery <span class="w-8 h-[1px] bg-current"></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TESTIMONIALS -->
+        <section class="py-24 md:py-32 relative bg-[#050505] overflow-hidden">
+            <div class="absolute inset-0 bg-[url('./assets/marina_residence.png')] bg-cover bg-center opacity-10"></div>
+            <div class="container mx-auto px-6 md:px-16 relative z-10 flex flex-col items-center text-center">
+                
+                <h2 class="font-serif text-2xl md:text-4xl mb-10 md:mb-16 text-reveal">Words from our <span class="italic font-light">Investors.</span></h2>
+
+                <div class="glass-panel p-8 md:p-16 max-w-4xl mx-auto rounded-sm relative border border-white/10 test-card">
+                    <div class="absolute -top-4 md:-top-6 left-1/2 -translate-x-1/2 text-4xl md:text-6xl text-gold font-serif leading-none">"</div>
+                    <p class="font-serif text-lg md:text-3xl leading-relaxed mb-8 md:mb-10 text-white/90">
+                        The level of exclusivity and attention to detail provided by Velora is unmatched. They secured a penthouse in Downtown Dubai that wasn't even on the open market. A truly seamless, white-glove experience.
+                    </p>
+                    <div class="flex flex-col items-center">
+                        <span class="text-[10px] md:text-xs tracking-widest uppercase text-white mb-1">Alexander M.</span>
+                        <span class="text-[8px] md:text-[10px] tracking-widest uppercase text-gold">London / Dubai</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. FINAL CTA -->
+        <section class="relative h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="./assets/palm_villa.png" alt="Footer CTA" class="w-full h-full object-cover opacity-40">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 text-center px-6 w-full max-w-4xl">
+                <h2 class="font-serif text-4xl md:text-7xl lg:text-[6rem] mb-8 md:mb-12 split-text">
+                    Your Dubai <br><span class="italic font-light">Address Awaits.</span>
+                </h2>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 fade-up">
+                    <a href="#contact" class="px-8 py-4 md:px-12 md:py-5 bg-white text-dark text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans hover:bg-gold transition-colors duration-300">
+                        Schedule Consultation
+                    </a>
+                    <a href="#" class="btn-magnetic px-8 py-4 md:px-12 md:py-5 glass-panel text-[10px] md:text-xs tracking-[0.2em] uppercase font-sans hover:text-dark">
+                        WhatsApp Inquiry
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. FOOTER -->
+        <footer class="bg-dark pt-12 md:pt-16 pb-8 border-t border-white/5 relative z-10">
+            <div class="container mx-auto px-6 md:px-16">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-8 md:gap-10">
+                    <div>
+                        <h2 class="font-serif text-2xl md:text-3xl tracking-[0.2em] uppercase font-light mb-4 md:mb-6">Velora</h2>
+                        <p class="text-muted font-light text-[10px] md:text-sm max-w-xs leading-relaxed">Exclusive luxury real estate portfolio curating Dubai's finest addresses for the global elite.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-8 sm:gap-16 md:gap-24 text-[10px] md:text-sm font-light w-full md:w-auto">
+                        <div class="flex flex-col gap-3 md:gap-4">
+                            <span class="text-[8px] md:text-[10px] tracking-widest uppercase text-gold mb-1 md:mb-2">Contact</span>
+                            <a href="#" class="text-muted hover:text-white transition-colors">inquiries@velora.ae</a>
+                            <a href="#" class="text-muted hover:text-white transition-colors">+971 4 000 0000</a>
+                        </div>
+                        <div class="flex flex-col gap-3 md:gap-4">
+                            <span class="text-[8px] md:text-[10px] tracking-widest uppercase text-gold mb-1 md:mb-2">Location</span>
+                            <span class="text-muted">Boulevard Plaza, Tower 1</span>
+                            <span class="text-muted">Downtown Dubai, UAE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col-reverse md:flex-row justify-between items-center pt-8 border-t border-white/10 text-[10px] md:text-xs text-muted font-light gap-6 md:gap-4">
+                    <p>&copy; 2026 Velora Estates. All rights reserved.</p>
+                    <div class="flex gap-6 uppercase tracking-widest">
+                        <a href="#" class="hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+                        <a href="#" class="hover:text-white transition-colors">YouTube</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // --- 1. LENIS SMOOTH SCROLL ---
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time)=>{
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // --- 2. CUSTOM TEXT SPLIT (Since SplitText is paid) ---
+        function splitTextIntoSpans(selector) {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                const text = el.innerText;
+                const splitText = text.split(' ').map(word => {
+                    const chars = word.split('').map(char => `<span class="char">${char}</span>`).join('');
+                    return `<span class="word">${chars}</span>`;
+                }).join(' ');
+                el.innerHTML = splitText;
+            });
+        }
+
+        // --- 3. LOADER & INITIAL ANIMATIONS ---
+        window.addEventListener('load', () => {
+            gsap.to('#loader-bar', {
+                width: '100%',
+                duration: 1.5,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    gsap.to('.loader', {
+                        yPercent: -100,
+                        duration: 1,
+                        ease: 'power4.inOut',
+                        onComplete: initAnimations
+                    });
+                }
+            });
+        });
+
+        function initAnimations() {
+            // Split Text setup
+            splitTextIntoSpans('.split-text');
+            
+            const tl = gsap.timeline();
+            
+            // Hero BG Scale
+            tl.to('#hero-bg', { scale: 1, duration: 2, ease: 'power3.out' }, 0);
+            
+            // Text Animations
+            tl.to('.split-text .char', {
+                y: 0,
+                opacity: 1,
+                stagger: 0.02,
+                duration: 1,
+                ease: 'power3.out'
+            }, 0.5);
+
+            // Fade ups
+            tl.fromTo('.fade-up', 
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: 'power2.out' },
+                "-=0.5"
+            );
+
+            setupScrollAnimations();
+        }
+
+        // --- 4. SCROLL ANIMATIONS ---
+        function setupScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Property Cards Parallax & Fade
+            const properties = gsap.utils.toArray('.property-card');
+            properties.forEach((prop) => {
+                const img = prop.querySelector('.parallax-img');
+                const text = prop.querySelector('div:last-child');
+
+                // Image Parallax
+                gsap.fromTo(img, 
+                    { yPercent: -10, scale: 1.1 },
+                    {
+                        yPercent: 10,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: prop,
+                            start: 'top bottom',
+                            end: 'bottom top',
+                            scrub: true
+                        }
+                    }
+                );
+
+                // Reveal Text
+                gsap.fromTo(text,
+                    { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: prop,
+                            start: 'top 80%',
+                        }
+                    }
+                );
+            });
+
+            // Text Reveals (Headings)
+            const reveals = gsap.utils.toArray('.text-reveal');
+            reveals.forEach(reveal => {
+                gsap.fromTo(reveal,
+                    { y: 50, opacity: 0, clipPath: 'inset(100% 0 0 0)' },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        clipPath: 'inset(0% 0 0 0)',
+                        duration: 1.2,
+                        ease: 'power4.out',
+                        scrollTrigger: {
+                            trigger: reveal,
+                            start: 'top 85%'
+                        }
+                    }
+                );
+            });
+
+            // Stats Counters
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                ScrollTrigger.create({
+                    trigger: '.stat-card',
+                    start: 'top 80%',
+                    once: true,
+                    onEnter: () => {
+                        const target = +counter.getAttribute('data-target');
+                        gsap.to(counter, {
+                            innerHTML: target,
+                            duration: 2,
+                            snap: { innerHTML: 1 },
+                            ease: 'power2.out'
+                        });
+                    }
+                });
+            });
+
+            // Horizontal Scroll
+            const horizontalSection = document.querySelector('.horizontal-scroll-container');
+            const panels = gsap.utils.toArray('.panel');
+
+            gsap.to(panels, {
+                xPercent: -100 * (panels.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#lifestyle",
+                    pin: true,
+                    scrub: 1,
+                    snap: 1 / (panels.length - 1),
+                    end: () => "+=" + horizontalSection.offsetWidth
+                }
+            });
+        }
+
+        // --- 5. CUSTOM CURSOR ---
+        const cursor = document.getElementById('cursor');
+        
+        // Only show custom cursor on desktop
+        if (window.innerWidth > 768) {
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.5,
+                    ease: 'power2.out',
+                    opacity: 1
+                });
+            });
+
+            document.addEventListener('mouseleave', () => {
+                gsap.to(cursor, { opacity: 0, duration: 0.3 });
+            });
+        }
+
+        // Add a simple animation for scroll indicators in css
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes scrolldown {
+                0% { transform: translateY(-100%); }
+                50% { transform: translateY(0); }
+                100% { transform: translateY(100%); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // --- 6. MOBILE MENU ---
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                gsap.to(mobileMenu, { y: 0, duration: 0.8, ease: 'power4.inOut' });
+                gsap.fromTo(mobileLinks, 
+                    { y: 30, opacity: 0 }, 
+                    { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.3, ease: 'power3.out' }
+                );
+            } else {
+                gsap.to(mobileMenu, { y: '-100%', duration: 0.8, ease: 'power4.inOut' });
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+    </script>
+</body>
+</html>

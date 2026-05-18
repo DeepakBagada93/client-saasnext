@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slovenian Bazaar | Authentic European & Middle Eastern Delicacies</title>
+    <meta name="description" content="Discover authentic sweets, snacks, and delicacies from Greece, Eastern Europe, and the Middle East. Premium imported flavors by Slovenian Bazaar.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (Production-ready minified) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background: #050505;
+            --primary: #FFFFFF;
+            --secondary: #B0B0B0;
+            --accent: #D4A373;
+        }
+
+        /* Custom Tailwind-like utilities for our specific brand colors */
+        .bg-background { background-color: var(--background); }
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .text-accent { color: var(--accent); }
+        .border-accent { border-color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        .from-accent\/10 { --tw-gradient-from: rgba(212, 163, 115, 0.1); --tw-gradient-to: rgba(212, 163, 115, 0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+    </style>
+
+    <!-- GSAP & Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.04;
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .text-reveal {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        .cursor-glow {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 163, 115, 0.15) 0%, rgba(5, 5, 5, 0) 70%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        .horizontal-scroll-container {
+            width: 400vw;
+            height: 100vh;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .horizontal-section {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4A373;
+        }
+
+        .floating {
+            animation: floating-anim var(--d) infinite ease-in-out;
+        }
+
+        @keyframes floating-anim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="grain"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Loading Animation -->
+    <div class="loading-screen" id="loader">
+        <div class="text-center">
+            <h1 class="font-serif text-4xl mb-2 opacity-0" id="loader-text">Slovenian Bazaar</h1>
+            <div class="w-48 h-[1px] bg-white/10 mx-auto overflow-hidden">
+                <div class="h-full bg-accent w-0" id="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-40 px-8 py-6 flex justify-between items-center mix-blend-difference">
+        <div class="font-serif text-2xl font-bold tracking-tight">SLOVENIAN BAZAAR</div>
+        <div class="hidden md:flex space-x-12 text-sm uppercase tracking-widest font-medium">
+            <a href="#story" class="hover:text-accent transition-colors">Story</a>
+            <a href="#products" class="hover:text-accent transition-colors">Collection</a>
+            <a href="#experience" class="hover:text-accent transition-colors">Experience</a>
+            <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+        </div>
+        <button class="md:hidden text-white" id="menu-toggle" aria-label="Toggle Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-background z-50 flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-500 md:hidden">
+        <button id="menu-close" class="absolute top-8 right-8 text-white">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <a href="#story" class="mobile-link font-serif text-4xl hover:text-accent transition-colors">Story</a>
+        <a href="#products" class="mobile-link font-serif text-4xl hover:text-accent transition-colors">Collection</a>
+        <a href="#experience" class="mobile-link font-serif text-4xl hover:text-accent transition-colors">Experience</a>
+        <a href="#contact" class="mobile-link font-serif text-4xl hover:text-accent transition-colors">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="overflow-hidden relative min-h-screen flex items-center justify-center pt-20">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background"></div>
+            <img src="hero_delicacy_1778917824258.png" alt="Hero Delicacy" class="w-full h-full object-cover opacity-60 scale-110" id="hero-bg-img">
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+            <div class="overflow-hidden mb-4">
+                <p class="text-accent uppercase tracking-[0.2em] md:tracking-[0.3em] text-xs md:text-sm mb-2 opacity-0" id="hero-tagline">Authentic European & Middle Eastern Delicacies</p>
+            </div>
+            <h1 class="font-serif text-5xl md:text-8xl lg:text-[9rem] leading-[1] md:leading-[0.9] mb-8 text-reveal" id="hero-title">
+                Taste the <br><span class="italic text-accent">World.</span>
+            </h1>
+            <p class="text-secondary text-base md:text-xl max-w-2xl mx-auto mb-10 opacity-0" id="hero-sub">
+                A curated selection of authentic sweets, snacks, and delicacies from the sun-drenched shores of Greece to the historic heart of Eastern Europe.
+            </p>
+            <div class="opacity-0" id="hero-cta">
+                <a href="#products" class="inline-block px-8 md:px-10 py-3 md:py-4 border border-white/20 hover:border-accent hover:text-accent transition-all duration-500 uppercase tracking-widest text-xs md:text-sm glass">
+                    Explore Collection
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Elements (Hidden on mobile for performance) -->
+        <div class="hidden md:block absolute top-1/4 left-10 w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden glass p-2 opacity-20 floating" style="--d: 6s">
+            <img src="product_baklava_1778917843498.png" class="w-full h-full object-cover rounded-full">
+        </div>
+        <div class="hidden md:block absolute bottom-1/4 right-10 w-40 h-40 md:w-64 md:h-64 rounded-full overflow-hidden glass p-2 opacity-20 floating" style="--d: 8s">
+            <img src="product_pistachio_dessert_1778917912252.png" class="w-full h-full object-cover rounded-full">
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section id="story" class="py-20 md:py-32 px-6 md:px-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+            <div class="relative">
+                <div class="aspect-[4/5] overflow-hidden rounded-sm glass p-1">
+                    <img src="story_main_1778917984511.png" alt="Sweets Collection" class="w-full h-full object-cover parallax-img">
+                </div>
+                <div class="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 w-1/2 aspect-square glass p-1 rounded-sm hidden sm:block">
+                    <img src="exp_fresh_1778917953917.png" alt="Fresh Pastry" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <div class="space-y-6 md:space-y-8">
+                <h2 class="font-serif text-4xl md:text-7xl leading-tight">Tradition, <br><span class="italic text-accent">Imported.</span></h2>
+                <div class="w-16 md:w-20 h-[1px] bg-accent"></div>
+                <p class="text-secondary text-base md:text-lg leading-relaxed">
+                    At Slovenian Bazaar, we believe that food is the most intimate way to experience a culture. Our journey began with a simple passion: to bring the authentic, time-honored flavors of European and Middle Eastern heritage to your doorstep.
+                </p>
+                <p class="text-secondary text-base md:text-lg leading-relaxed">
+                    From the crisp layers of handmade Baklava to the delicate spices of Eastern European chocolates, every item in our collection is hand-picked for its authenticity, quality, and soul.
+                </p>
+                <div class="pt-4">
+                    <a href="#" class="group flex items-center space-x-4 text-xs md:text-sm uppercase tracking-widest font-medium">
+                        <span>Our Heritage</span>
+                        <span class="w-8 h-[1px] bg-white group-hover:w-16 transition-all duration-500"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="products" class="py-20 md:py-32 bg-[#080808]">
+        <div class="px-6 md:px-20 mb-12 md:mb-20">
+            <h2 class="font-serif text-5xl md:text-8xl mb-4">The <span class="italic text-accent">Collection</span></h2>
+            <p class="text-secondary tracking-[0.2em] uppercase text-[10px] md:text-sm">Curated Delicacies & Rare Imports</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 px-6 md:px-20">
+            <!-- Product 1 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="product_baklava_1778917843498.png" alt="Baklava" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">Artisan Baklava</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Glistening Honey & Pistachio</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="product_greek_cookies_1778917879125.png" alt="Greek Cookies" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">Greek Kourabiedes</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Traditional Butter Cookies</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="product_turkish_delight_1778917859612.png" alt="Turkish Delight" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">Turkish Delight</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Rose & Pistachio Infusion</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+            <!-- Product 4 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="product_chocolates_1778917894923.png" alt="Chocolates" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">Dark Chocolates</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Eastern European Artisan Selection</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+            <!-- Product 5 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="product_pistachio_dessert_1778917912252.png" alt="Pistachio Dessert" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">Pistachio Indulgence</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Premium Nut-Rich Pâtisserie</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+            <!-- Product 6 -->
+            <div class="product-card relative group overflow-hidden aspect-square glass">
+                <img src="exp_fresh_1778917953917.png" alt="Imported Snacks" class="product-img w-full h-full object-cover transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/40 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 md:p-10">
+                    <h3 class="font-serif text-2xl md:text-3xl mb-1 md:mb-2">European Bakery</h3>
+                    <p class="text-[10px] md:text-sm text-secondary uppercase tracking-widest mb-4">Freshly Imported Heritage Snacks</p>
+                    <div class="h-[1px] w-full md:w-0 group-hover:w-full bg-accent transition-all duration-700"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horizontal Experience Section -->
+    <section id="experience" class="relative overflow-hidden">
+        <div class="horizontal-scroll-container flex w-[400vw]">
+            <div class="horizontal-section relative flex items-center justify-center min-h-[80vh] md:min-h-screen md:w-screen py-20 md:py-0">
+                <div class="absolute inset-0 -z-10">
+                    <img src="exp_ingredients_1778917936937.png" class="w-full h-full object-cover opacity-30">
+                </div>
+                <div class="text-center px-6">
+                    <h2 class="font-serif text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] leading-tight text-reveal">Authentic <br><span class="italic text-accent">Ingredients</span></h2>
+                    <p class="text-secondary tracking-[0.1em] md:tracking-widest uppercase mt-6 md:mt-8 text-xs md:text-base">Pure Saffron. Wild Honey. Organic Nuts.</p>
+                </div>
+            </div>
+            <div class="horizontal-section relative flex items-center justify-center min-h-[80vh] md:min-h-screen md:w-screen bg-[#0a0a0a] py-20 md:py-0">
+                <div class="absolute inset-0 -z-10">
+                    <img src="exp_fresh_1778917953917.png" class="w-full h-full object-cover opacity-30">
+                </div>
+                <div class="text-center px-6">
+                    <h2 class="font-serif text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] leading-tight text-reveal">Imported <br><span class="italic text-accent">Fresh</span></h2>
+                    <p class="text-secondary tracking-[0.1em] md:tracking-widest uppercase mt-6 md:mt-8 text-xs md:text-base">Preserving Tradition in Every Bite.</p>
+                </div>
+            </div>
+            <div class="horizontal-section relative flex items-center justify-center min-h-[80vh] md:min-h-screen md:w-screen py-20 md:py-0">
+                <div class="absolute inset-0 -z-10">
+                    <img src="exp_recipes_1778917969149.png" class="w-full h-full object-cover opacity-30">
+                </div>
+                <div class="text-center px-6">
+                    <h2 class="font-serif text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] leading-tight text-reveal">Time-Honored <br><span class="italic text-accent">Recipes</span></h2>
+                    <p class="text-secondary tracking-[0.1em] md:tracking-widest uppercase mt-6 md:mt-8 text-xs md:text-base">The Secrets of Generations, Unveiled.</p>
+                </div>
+            </div>
+            <div class="horizontal-section relative flex items-center justify-center min-h-[80vh] md:min-h-screen md:w-screen bg-[#0c0c0c] py-20 md:py-0">
+                <div class="absolute inset-0 -z-10">
+                    <img src="hero_delicacy_1778917824258.png" class="w-full h-full object-cover opacity-30">
+                </div>
+                <div class="text-center px-6">
+                    <h2 class="font-serif text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] leading-tight text-reveal">Premium <br><span class="italic text-accent">Taste</span></h2>
+                    <p class="text-secondary tracking-[0.1em] md:tracking-widest uppercase mt-6 md:mt-8 text-xs md:text-base">A Symphony of Flavors Awaits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="overflow-hidden py-20 md:py-32 px-6 md:px-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 md:mb-20 text-center">
+                <h2 class="font-serif text-4xl md:text-5xl mb-4">What Our Connoisseurs Say</h2>
+                <div class="w-16 md:w-20 h-[1px] bg-accent mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass p-8 md:p-12 rounded-sm space-y-6">
+                    <div class="flex text-accent space-x-1">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <p class="text-base md:text-lg italic leading-relaxed text-secondary group-hover:text-white transition-colors">"The Baklava reminded me of my childhood summers in Greece. Truly authentic and remarkably fresh."</p>
+                    <div>
+                        <p class="font-bold uppercase tracking-widest text-xs md:text-sm">Elena Pappas</p>
+                        <p class="text-[10px] text-secondary mt-1">Lifestyle Architect</p>
+                    </div>
+                </div>
+                <div class="glass p-8 md:p-12 rounded-sm space-y-6">
+                    <div class="flex text-accent space-x-1">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <p class="text-base md:text-lg italic leading-relaxed text-secondary group-hover:text-white transition-colors">"Finally, a source for real Eastern European chocolate in the states. The quality is incomparable."</p>
+                    <div>
+                        <p class="font-bold uppercase tracking-widest text-xs md:text-sm">Marko Petrovic</p>
+                        <p class="text-[10px] text-secondary mt-1">Gourmet Critic</p>
+                    </div>
+                </div>
+                <div class="glass p-8 md:p-12 rounded-sm space-y-6">
+                    <div class="flex text-accent space-x-1">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <p class="text-base md:text-lg italic leading-relaxed text-secondary group-hover:text-white transition-colors">"The presentation and the depth of flavor in the Turkish Delight is simply world-class."</p>
+                    <div>
+                        <p class="font-bold uppercase tracking-widest text-xs md:text-sm">Sarah Al-Fayed</p>
+                        <p class="text-[10px] text-secondary mt-1">Culinary Curator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="contact" class="py-24 md:py-40 relative overflow-hidden text-center px-6">
+        <div class="absolute inset-0 -z-10 bg-gradient-to-t from-accent/10 to-transparent"></div>
+        <div class="max-w-4xl mx-auto space-y-8 md:space-y-12">
+            <h2 class="font-serif text-4xl md:text-[8rem] leading-none mb-4">Bring Authentic <br><span class="italic text-accent">Flavor Online.</span></h2>
+            <p class="text-secondary text-base md:text-xl max-w-xl mx-auto">Join our inner circle for exclusive access to rare seasonal imports and traditional delicacies.</p>
+            <div>
+                <a href="#" class="inline-block px-10 md:px-12 py-4 md:py-5 bg-white text-black font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-accent hover:text-white transition-all duration-500">
+                    View Collection
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 md:py-20 border-t border-white/5 px-6 md:px-20 bg-[#030303]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 md:mb-20">
+            <div class="col-span-1 md:col-span-2 space-y-6 md:space-y-8">
+                <h3 class="font-serif text-2xl md:text-3xl tracking-tight">SLOVENIAN BAZAAR</h3>
+                <p class="text-secondary text-sm md:text-base max-w-sm">Elevating the culinary landscape through the curation of authentic European and Middle Eastern heritage foods.</p>
+            </div>
+            <div class="space-y-4 md:space-y-6">
+                <h4 class="text-[10px] md:text-xs uppercase tracking-widest font-bold text-accent">Navigation</h4>
+                <ul class="space-y-2 md:space-y-4 text-[10px] md:text-sm text-secondary uppercase tracking-widest">
+                    <li><a href="#" class="hover:text-white transition-colors">The Story</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">The Collection</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Wholesale</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping</a></li>
+                </ul>
+            </div>
+            <div class="space-y-4 md:space-y-6">
+                <h4 class="text-[10px] md:text-xs uppercase tracking-widest font-bold text-accent">Contact</h4>
+                <ul class="space-y-2 md:space-y-4 text-[10px] md:text-sm text-secondary tracking-widest">
+                    <li>hello@slovenianbazaar.com</li>
+                    <li>Instagram: @slovenian.bazaar</li>
+                    <li>New York, NY</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[8px] md:text-[10px] uppercase tracking-widest text-white/20 border-t border-white/5 pt-8 space-y-4 md:space-y-0 text-center md:text-left">
+            <p>© 2026 Slovenian Bazaar. All Rights Reserved.</p>
+            <p>Designed for the Modern Connoisseur.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Lenis Smooth Scroll
+        const lenis = new Lenis()
+        function raf(time) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+        requestAnimationFrame(raf)
+
+        // GSAP ScrollTrigger Setup
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Loader Animation
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#loader-bar", { width: "100%", duration: 1.5, ease: "power4.inOut" })
+              .to("#loader-text", { opacity: 1, y: -10, duration: 0.8 }, "-=0.5")
+              .to("#loader", { y: "-100%", duration: 1.2, ease: "expo.inOut", delay: 0.5 })
+              .from("#hero-title span", { y: 100, stagger: 0.1, duration: 1, ease: "power4.out" }, "-=0.5")
+              .to("#hero-tagline", { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to("#hero-sub", { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to("#hero-cta", { opacity: 1, scale: 1, duration: 1 }, "-=0.8");
+        });
+
+        // Mouse Follow Glow
+        const cursorGlow = document.getElementById('cursor-glow');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursorGlow, {
+                left: e.clientX,
+                top: e.clientY,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+
+        // Hero Parallax
+        gsap.to("#hero-bg-img", {
+            scrollTrigger: {
+                trigger: "section",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            },
+            y: 200,
+            scale: 1.2
+        });
+
+        // Story Image Parallax
+        gsap.to(".parallax-img", {
+            scrollTrigger: {
+                trigger: "#story",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            },
+            y: -100
+        });
+
+        // Section Fade Reveals
+        gsap.utils.toArray('section').forEach(section => {
+            if (section.id === 'experience') return; 
+            
+            gsap.from(section.querySelectorAll('.font-serif, p, .glass'), {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+        });
+
+        // GSAP MatchMedia for Desktop/Mobile Experience (Unified Horizontal Scroll)
+        let mm = gsap.matchMedia();
+
+        mm.add("all", () => {
+            // Horizontal Scroll for All Devices
+            const sections = gsap.utils.toArray(".horizontal-section");
+            const container = document.querySelector(".horizontal-scroll-container");
+            
+            const scrollTween = gsap.to(sections, {
+                xPercent: -100 * (sections.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#experience",
+                    pin: true,
+                    scrub: 1,
+                    snap: 1 / (sections.length - 1),
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    end: () => "+=" + (container.scrollWidth - window.innerWidth)
+                }
+            });
+
+            // Text Reveals
+            sections.forEach(section => {
+                const text = section.querySelector(".text-reveal");
+                if (text) {
+                    gsap.from(text, {
+                        y: 100,
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: section,
+                            containerAnimation: scrollTween,
+                            start: "left center",
+                            toggleActions: "play none none reverse"
+                        }
+                    });
+                }
+            });
+        });
+
+        // Floating Motion
+        gsap.to(".floating", {
+            y: 30,
+            duration: "var(--d)",
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuClose = document.getElementById('menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        const toggleMenu = (open) => {
+            gsap.to(mobileMenu, {
+                x: open ? "0%" : "100%",
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+            if (open) {
+                gsap.from(".mobile-link", {
+                    y: 20,
+                    opacity: 0,
+                    stagger: 0.1,
+                    delay: 0.4,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            }
+        };
+
+        menuToggle.addEventListener('click', () => toggleMenu(true));
+        menuClose.addEventListener('click', () => toggleMenu(false));
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => toggleMenu(false));
+        });
+
+        // Refresh on Resize
+        window.addEventListener("resize", () => {
+            ScrollTrigger.refresh();
+        });
+    </script>
+</body>
+</html>
