@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NANCY | Modern Bistro Culture, Reimagined</title>
+    <meta name="description" content="An intimate dining experience centered around natural wine, elevated comfort food, and unforgettable atmosphere.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --text-cream: #f5f5f0;
+            --accent-burgundy: #4a0e0e;
+            --accent-orange: #d47a3e;
+            --muted-beige: #d9c5b2;
+            --serif: 'Playfair Display', serif;
+            --sans: 'Inter', sans-serif;
+            --transition-smooth: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-cream);
+            font-family: var(--sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--text-cream);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        #cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--text-cream);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, opacity 0.3s ease;
+            opacity: 0.5;
+        }
+
+        /* Grain Overlay */
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--serif);
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: -0.02em;
+        }
+
+        .editorial-label {
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--muted-beige);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            color: var(--text-cream);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-cream);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 400;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-cream);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('hero.png');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6) contrast(1.1);
+            transform: scale(1.1);
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero-subtitle {
+            font-family: var(--sans);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-weight: 300;
+            color: var(--muted-beige);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn-reservation {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            border: 1px solid var(--text-cream);
+            color: var(--text-cream);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            transition: var(--transition-smooth);
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn-reservation:hover {
+            background: var(--text-cream);
+            color: var(--bg-dark);
+        }
+
+        /* Experience Section */
+        .section-padding {
+            padding: 10rem 4rem;
+        }
+
+        .experience {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8rem;
+            align-items: center;
+        }
+
+        .experience-text {
+            max-width: 500px;
+        }
+
+        .experience-image-wrap {
+            position: relative;
+            height: 70vh;
+            overflow: hidden;
+        }
+
+        .experience-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+        }
+
+        /* Dishes Section */
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .dish-card {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+            background: #151515;
+        }
+
+        .dish-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dish-card:hover .dish-image {
+            transform: scale(1.1);
+        }
+
+        .dish-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            transform: translateY(20px);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .dish-card:hover .dish-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Horizontal Gallery */
+        .horizontal-gallery {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: var(--bg-dark);
+        }
+
+        .gallery-container {
+            display: flex;
+            padding: 0 4rem;
+            gap: 4rem;
+            will-change: transform;
+        }
+
+        .gallery-item {
+            flex-shrink: 0;
+            width: 60vw;
+            height: 70vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            background: var(--accent-burgundy);
+            color: var(--text-cream);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10rem;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(245, 245, 240, 0.1);
+            padding: 2rem 0;
+            transition: var(--transition-smooth);
+        }
+
+        .menu-item:hover {
+            padding-left: 1rem;
+            border-bottom: 1px solid var(--text-cream);
+        }
+
+        .menu-price {
+            font-family: var(--serif);
+            font-style: italic;
+        }
+
+        /* Reservation Section */
+        .reservation {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .reservation-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(245, 245, 240, 0.3);
+            padding: 1rem 0;
+            color: var(--text-cream);
+            font-family: var(--sans);
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        input:focus {
+            outline: none;
+            border-bottom: 1px solid var(--text-cream);
+        }
+
+        /* Footer */
+        footer {
+            padding: 5rem 4rem;
+            border-top: 1px solid rgba(245, 245, 240, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-logo {
+            font-family: var(--serif);
+            font-size: 8vw;
+            line-height: 0.8;
+            color: rgba(245, 245, 240, 0.05);
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .experience, .menu-grid, .dishes-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+            nav {
+                padding: 1.5rem 2rem;
+            }
+            .section-padding {
+                padding: 5rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-follower"></div>
+    <div class="grain"></div>
+
+    <nav>
+        <a href="#" class="nav-logo">NANCY</a>
+        <div class="nav-links">
+            <a href="#experience">Experience</a>
+            <a href="#menu">Menu</a>
+            <a href="#reserve">Reserve</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <span class="editorial-label">Est. 2024 — New York</span>
+                <h1 class="hero-title">Modern Bistro Culture, Reimagined.</h1>
+                <p class="hero-subtitle">A warm and intimate dining experience centered around natural wine, elevated comfort food, and unforgettable atmosphere.</p>
+                <a href="#reserve" class="btn-reservation">Book a Table</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="experience" class="section-padding experience">
+            <div class="experience-text" data-scroll-reveal>
+                <span class="editorial-label">The Story</span>
+                <h2 style="font-size: 3.5rem; margin-bottom: 2rem;">Intimacy in every detail.</h2>
+                <p style="font-weight: 300; font-size: 1.1rem; color: var(--muted-beige); margin-bottom: 2rem;">
+                    Nancy is born from a desire to return to the essentials of hospitality. Inspired by the legendary bistros of Paris and the gritty elegance of 1970s New York, we've created a space where high-end dining feels like a home-cooked meal among friends.
+                </p>
+                <p style="font-style: italic; font-family: var(--serif);">"A masterpiece of mood and flavor." — The Daily Editorial</p>
+            </div>
+            <div class="experience-image-wrap" data-parallax>
+                <img src="atmosphere.png" alt="Atmosphere" class="experience-image">
+            </div>
+        </section>
+
+        <!-- Signature Dishes -->
+        <section class="section-padding">
+            <span class="editorial-label">Signature Dishes</span>
+            <h2 style="font-size: 3rem; margin-bottom: 4rem;">Crafted with intent.</h2>
+            <div class="dishes-grid">
+                <div class="dish-card" data-hover-reveal>
+                    <img src="dish.png" alt="Dish 1" class="dish-image">
+                    <div class="dish-info">
+                        <h3 style="font-size: 1.5rem;">Dry-Aged Ribeye</h3>
+                        <p style="font-size: 0.9rem; color: var(--muted-beige);">Bone marrow butter, wild mushrooms.</p>
+                    </div>
+                </div>
+                <div class="dish-card" data-hover-reveal>
+                    <img src="dish.png" alt="Dish 2" class="dish-image" style="filter: hue-rotate(45deg);">
+                    <div class="dish-info">
+                        <h3 style="font-size: 1.5rem;">Cavatelli Carbonara</h3>
+                        <p style="font-size: 0.9rem; color: var(--muted-beige);">Hand-rolled pasta, cured egg yolk.</p>
+                    </div>
+                </div>
+                <div class="dish-card" data-hover-reveal>
+                    <img src="dish.png" alt="Dish 3" class="dish-image" style="filter: saturate(0.5);">
+                    <div class="dish-info">
+                        <h3 style="font-size: 1.5rem;">Roasted Scallops</h3>
+                        <p style="font-size: 0.9rem; color: var(--muted-beige);">Brown butter, pickled apples.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horizontal Scroll Gallery -->
+        <section class="horizontal-gallery">
+            <div class="gallery-container">
+                <div class="gallery-item">
+                    <img src="hero.png" alt="Interior">
+                </div>
+                <div class="gallery-item">
+                    <img src="atmosphere.png" alt="Detail">
+                </div>
+                <div class="gallery-item">
+                    <img src="hero.png" alt="Kitchen">
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="section-padding menu-section">
+            <div class="menu-header" style="margin-bottom: 6rem; text-align: center;">
+                <span class="editorial-label">The Menu</span>
+                <h2 style="font-size: 4rem;">Seasonal Selection</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-col">
+                    <h3 class="editorial-label" style="color: var(--text-cream); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1rem; margin-bottom: 2rem;">Small Plates</h3>
+                    <div class="menu-item">
+                        <span>Oysters on the Half Shell</span>
+                        <span class="menu-price">$24</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Beef Tartare & Sourdough</span>
+                        <span class="menu-price">$22</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Burrata with Heirloom Beets</span>
+                        <span class="menu-price">$19</span>
+                    </div>
+                </div>
+                <div class="menu-col">
+                    <h3 class="editorial-label" style="color: var(--text-cream); border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1rem; margin-bottom: 2rem;">Main Courses</h3>
+                    <div class="menu-item">
+                        <span>Duck Confit with Cherry Jus</span>
+                        <span class="menu-price">$38</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Whole Branzino en Papillote</span>
+                        <span class="menu-price">$42</span>
+                    </div>
+                    <div class="menu-item">
+                        <span>Wild Mushroom Risotto</span>
+                        <span class="menu-price">$34</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reservation -->
+        <section id="reserve" class="section-padding">
+            <div class="reservation">
+                <span class="editorial-label">Reservations</span>
+                <h2 style="font-size: 3.5rem;">Join us for the evening.</h2>
+                <form class="reservation-form">
+                    <div class="input-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="date" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" placeholder="Guests" min="1" max="10" required>
+                    </div>
+                </form>
+                <button class="btn-reservation" style="margin-top: 4rem; width: 100%; opacity: 1; transform: none;">Confirm Booking</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <h4 class="editorial-label">Visit Us</h4>
+            <p>124 Ludlow St, New York, NY 10002</p>
+            <p>Tuesday — Sunday | 5PM — 11PM</p>
+            <div style="margin-top: 2rem;">
+                <a href="#" style="color: var(--text-cream); text-decoration: none; margin-right: 1.5rem;">Instagram</a>
+                <a href="#" style="color: var(--text-cream); text-decoration: none;">Twitter</a>
+            </div>
+        </div>
+        <div class="footer-logo">NANCY</div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const follower = document.getElementById('cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+            gsap.to(follower, { x: e.clientX - 16, y: e.clientY - 16, duration: 0.3 });
+        });
+
+        document.querySelectorAll('a, button, .dish-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(follower, { scale: 1.5, background: 'rgba(245, 245, 240, 0.1)', duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(follower, { scale: 1, background: 'transparent', duration: 0.3 });
+            });
+        });
+
+        // Initialize Lenis
+        const lenis = new Lenis();
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Reveal
+        const tl = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 }});
+        tl.to('.hero-bg', { scale: 1, duration: 2.5 })
+          .to('.hero-title', { y: 0, opacity: 1 }, '-=2')
+          .to('.hero-subtitle', { y: 0, opacity: 1 }, '-=1.5')
+          .to('.btn-reservation', { y: 0, opacity: 1 }, '-=1.2');
+
+        // Scroll Parallax
+        gsap.to('.hero-bg', {
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            y: 200,
+            scale: 1.2
+        });
+
+        // Horizontal Gallery Scroll
+        const galleryContainer = document.querySelector('.gallery-container');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        gsap.to(galleryContainer, {
+            x: () => -(galleryContainer.scrollWidth - window.innerWidth),
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.horizontal-gallery',
+                start: 'top top',
+                end: () => `+=${galleryContainer.scrollWidth}`,
+                scrub: 1,
+                pin: true,
+                anticipatePin: 1,
+                invalidateOnRefresh: true
+            }
+        });
+
+        // Reveal animations on scroll
+        document.querySelectorAll('[data-scroll-reveal]').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 80%'
+                },
+                y: 60,
+                opacity: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            });
+        });
+
+        // Parallax for image wraps
+        document.querySelectorAll('[data-parallax]').forEach(el => {
+            const img = el.querySelector('img');
+            gsap.to(img, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                },
+                y: -100,
+                ease: 'none'
+            });
+        });
+
+        // Hover magnetic effect for buttons
+        document.querySelectorAll('.btn-reservation').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const { left, top, width, height } = btn.getBoundingClientRect();
+                const x = e.clientX - left - width / 2;
+                const y = e.clientY - top - height / 2;
+                gsap.to(btn, { x: x * 0.2, y: y * 0.2, duration: 0.3 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { x: 0, y: 0, duration: 0.3 });
+            });
+        });
+
+    </script>
+</body>
+</html>
