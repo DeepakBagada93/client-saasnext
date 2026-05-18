@@ -35,10 +35,13 @@
     </script>
     
     <style>
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
         body {
             background-color: #F7F5F2;
             color: #111111;
-            overflow-x: hidden;
             font-family: 'Inter', sans-serif;
         }
         h1, h2, h3, h4, h5, .font-playfair {
@@ -135,11 +138,11 @@
     </div>
 
     <!-- 1. HERO SECTION -->
-    <section id="hero-horizontal" class="h-[100svh] w-full relative overflow-hidden bg-bg-light">
+    <section id="hero-horizontal" class="h-[100svh] md:h-screen w-full relative overflow-hidden bg-bg-light">
         <div class="horizontal-scroll-container flex h-full w-[400vw]">
             
             <!-- Panel 1 -->
-            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+            <div class="hero-panel w-[100vw] h-full relative flex items-center justify-center overflow-hidden shrink-0">
                 <img src="images/hero1.jpg" alt="Dubai Skyline" class="absolute inset-0 w-full h-full object-cover opacity-90" data-speed="0.8">
                 <div class="absolute inset-0 bg-gradient-to-t from-bg-main/90 md:from-bg-main/80 via-transparent to-transparent"></div>
                 <div class="relative z-10 text-center px-4 w-full max-w-7xl mx-auto flex flex-col items-center mt-12 md:mt-0">
@@ -153,7 +156,7 @@
             </div>
 
             <!-- Panel 2 -->
-            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+            <div class="hero-panel w-[100vw] h-full relative flex items-center justify-center overflow-hidden shrink-0">
                 <img src="images/hero2.jpg" alt="Iconic Residence" class="absolute inset-0 w-full h-full object-cover opacity-90">
                 <div class="absolute inset-0 bg-black/10"></div>
                 <div class="relative z-10 text-center px-6">
@@ -164,7 +167,7 @@
             </div>
 
             <!-- Panel 3 -->
-            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+            <div class="hero-panel w-[100vw] h-full relative flex items-center justify-center overflow-hidden shrink-0">
                 <img src="images/hero3.jpg" alt="Waterfront Villa" class="absolute inset-0 w-full h-full object-cover opacity-90">
                 <div class="absolute inset-0 bg-black/10"></div>
                 <div class="relative z-10 text-center px-6">
@@ -175,7 +178,7 @@
             </div>
 
             <!-- Panel 4 -->
-            <div class="hero-panel w-screen h-full relative flex items-center justify-center overflow-hidden shrink-0">
+            <div class="hero-panel w-[100vw] h-full relative flex items-center justify-center overflow-hidden shrink-0">
                 <img src="images/hero4.jpg" alt="Visionary Design" class="absolute inset-0 w-full h-full object-cover opacity-90">
                 <div class="absolute inset-0 bg-black/20"></div>
                 <div class="relative z-10 text-center px-6">
@@ -316,7 +319,7 @@
     </section>
 
     <!-- 4. HORIZONTAL PROPERTY GALLERY -->
-    <section id="gallery-horizontal" class="h-[70svh] md:h-screen w-full relative overflow-hidden bg-bg-main py-12 md:py-20 border-t border-border-elegant/30">
+    <section id="gallery-horizontal" class="h-[60svh] md:h-screen w-full relative overflow-hidden bg-bg-main py-12 md:py-20 border-t border-border-elegant/30">
         <div class="absolute top-6 left-6 md:top-16 md:left-16 z-10 px-0 mb-0">
             <span class="text-accent-gold uppercase tracking-[0.3em] text-[10px] md:text-xs font-semibold">Discover</span>
             <h2 class="text-3xl md:text-4xl font-playfair mt-2">The Lifestyle</h2>
@@ -324,28 +327,28 @@
         
         <div class="gallery-scroll-container flex items-center h-full w-[350vw] sm:w-[250vw] md:w-[200vw] gap-6 md:gap-12 px-6 md:px-16 pb-0 pt-16 md:pt-20">
             
-            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[40vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
                 <img src="images/hero4.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
                     <p class="font-playfair text-lg md:text-xl">Living Spaces</p>
                 </div>
             </div>
 
-            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[40vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
                 <img src="images/hero3.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
                     <p class="font-playfair text-lg md:text-xl">Infinity Pools</p>
                 </div>
             </div>
 
-            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[40vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
                 <img src="images/prop2.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
                     <p class="font-playfair text-lg md:text-xl">Skyline Balconies</p>
                 </div>
             </div>
 
-            <div class="gallery-item w-[80vw] md:w-[45vw] h-[50vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
+            <div class="gallery-item w-[80vw] md:w-[45vw] h-[40vh] md:h-[75vh] overflow-hidden relative shrink-0 shadow-2xl shadow-black/10 transition-transform duration-700 hover:scale-[1.02]">
                 <img src="images/arch2.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-text-primary glass px-6 md:px-8 py-3 md:py-4">
                     <p class="font-playfair text-lg md:text-xl">Spa Bathrooms</p>
@@ -599,8 +602,9 @@
         const heroContainer = document.querySelector('.horizontal-scroll-container');
         const heroPanels = gsap.utils.toArray('.hero-panel');
 
+        let heroScrollTween;
         if(heroSection && heroContainer && heroPanels.length) {
-            gsap.to(heroPanels, {
+            heroScrollTween = gsap.to(heroPanels, {
                 xPercent: -100 * (heroPanels.length - 1),
                 ease: "none",
                 scrollTrigger: {
@@ -645,10 +649,11 @@
             delay: 0.2
         });
 
+        // Hero Inner Image Parallax Fix
         heroPanels.forEach((panel, i) => {
             if(i === 0) return; // Skip first image
             const img = panel.querySelector('img');
-            if(img) {
+            if(img && heroScrollTween) {
                 gsap.fromTo(img, 
                     { xPercent: -15 },
                     { 
@@ -656,7 +661,7 @@
                         ease: "none",
                         scrollTrigger: {
                             trigger: panel,
-                            containerAnimation: gsap.getById(heroSection),
+                            containerAnimation: heroScrollTween,
                             start: "left right",
                             end: "right left",
                             scrub: true
