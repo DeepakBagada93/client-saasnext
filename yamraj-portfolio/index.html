@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAMRAJ | The Architect of Digital Worlds</title>
+    <!-- Google Fonts: Cinzel & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF6A00',
+                            crimson: '#8B0000',
+                            gold: '#D4AF37',
+                            gray: '#6B7280',
+                            bg1: '#050505',
+                            bg2: '#0B0B0B',
+                            bg3: '#111111'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 15s linear infinite',
+                        'spin-slow-reverse': 'spin 20s linear infinite reverse',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-brand-bg1 text-white font-inter overflow-x-hidden selection:bg-brand-crimson selection:text-white">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[100] flex items-center justify-center bg-brand-bg1">
+        <div class="relative z-10 flex flex-col items-center">
+            <div class="w-24 h-24 border-4 border-brand-bg3 border-t-brand-orange border-r-brand-crimson border-b-brand-gold rounded-full animate-spin mb-8 wheel-symbol shadow-[0_0_30px_rgba(255,106,0,0.3)]"></div>
+            <h1 class="font-cinzel text-xl md:text-3xl tracking-[0.3em] text-brand-gold uppercase glow-text preloader-text">Entering The Court Of Yamraj</h1>
+        </div>
+    </div>
+
+    <!-- Canvas Background for whole site (smoke/embers) -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
+
+    <!-- Main Content -->
+    <main class="relative z-10" id="main-content">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-[100svh] flex flex-col justify-center pt-24 pb-16 md:pt-20 md:pb-20 overflow-hidden">
+            <!-- Background Image with Overlay -->
+            <div class="absolute inset-0 z-0">
+                <img src="assets/hero-bg.png" alt="Yamraj Background" class="w-full h-full object-cover object-center opacity-30 transform scale-105" id="hero-bg-img">
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-bg1 via-brand-bg1/80 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-bg1 via-brand-bg1/50 to-transparent"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center h-full">
+                <!-- Left Content -->
+                <div class="hero-left flex flex-col justify-center order-2 lg:order-1 relative z-10 mt-10 lg:mt-0">
+                    <h1 class="hero-headline font-cinzel text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black text-white leading-[1.1] md:leading-none mb-4 md:mb-6 tracking-tighter burn-effect break-words">YAMRAJ</h1>
+                    <h2 class="font-inter text-sm sm:text-base md:text-xl text-brand-orange mb-4 md:mb-6 tracking-[0.15em] md:tracking-[0.2em] uppercase hero-sub">The Keeper of Digital Destiny • Architect of Virtual Worlds</h2>
+                    <p class="text-brand-gray text-sm sm:text-base md:text-xl max-w-lg mb-8 md:mb-12 border-l-2 border-brand-crimson pl-4 md:pl-6 hero-desc leading-relaxed">I do not follow trends. I judge them. Your digital presence evaluated, architected, and brought to life with inescapable precision.</p>
+                    
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 hero-cta w-full sm:w-auto">
+                        <a href="#portfolio" class="px-6 py-4 md:px-8 bg-brand-crimson text-white font-cinzel tracking-widest text-xs md:text-sm uppercase text-center hover:bg-brand-orange transition-all duration-500 shadow-[0_0_20px_rgba(139,0,0,0.4)] hover:shadow-[0_0_30px_rgba(255,106,0,0.6)] group">
+                            Enter The Realm
+                        </a>
+                        <a href="#skills" class="px-6 py-4 md:px-8 border border-brand-gold text-brand-gold font-cinzel tracking-widest text-xs md:text-sm uppercase text-center hover:bg-brand-gold hover:text-brand-bg1 transition-all duration-500">
+                            View Creations
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Side Illustration -->
+                <div class="hero-right flex justify-center items-center relative order-1 lg:order-2 h-[30vh] lg:h-[800px]">
+                    <img src="assets/trident.png" alt="Glowing Trident" class="w-full max-w-[200px] md:max-w-md lg:max-w-lg float-animation filter drop-shadow-[0_0_40px_rgba(255,106,0,0.4)] mix-blend-screen" id="hero-trident">
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Scroll -->
+        <section id="story-scroll" class="relative bg-brand-bg2 overflow-hidden min-h-screen md:h-screen w-full">
+            <div class="story-wrapper flex flex-col md:flex-row h-auto md:h-full relative md:absolute top-0 left-0 w-full md:w-[500vw]">
+                <!-- Panels -->
+                <div class="story-panel w-full md:w-screen h-screen flex flex-col justify-center items-center shrink-0 border-b md:border-b-0 md:border-r border-brand-bg3/50 px-6 md:px-10 relative">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/story_1.png" alt="Story 1" class="w-full h-full object-cover opacity-20">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg2 via-brand-bg2/80 to-transparent"></div>
+                    </div>
+                    <h3 class="font-cinzel text-8xl md:text-[15rem] text-brand-bg3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-black z-0 pointer-events-none tracking-tighter mix-blend-overlay opacity-50">01</h3>
+                    <h2 class="font-cinzel text-4xl md:text-7xl text-white mb-6 z-10 panel-title text-center drop-shadow-lg">The Cosmic Decree</h2>
+                    <p class="max-w-2xl text-center text-lg md:text-xl text-brand-gray z-10 panel-text font-light leading-relaxed drop-shadow-md">Every legendary project begins with a cosmic decree. The cycle of digital birth and eternal legacy starts here.</p>
+                </div>
+                <div class="story-panel w-full md:w-screen h-screen flex flex-col justify-center items-center shrink-0 border-b md:border-b-0 md:border-r border-brand-bg3/50 px-6 md:px-10 relative">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/story_2.png" alt="Story 2" class="w-full h-full object-cover opacity-20">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg2 via-brand-bg2/80 to-transparent"></div>
+                    </div>
+                    <h3 class="font-cinzel text-8xl md:text-[15rem] text-brand-bg3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-black z-0 pointer-events-none tracking-tighter mix-blend-overlay opacity-50">02</h3>
+                    <h2 class="font-cinzel text-4xl md:text-7xl text-white mb-6 z-10 panel-title text-center drop-shadow-lg">The Infrastructure</h2>
+                    <p class="max-w-2xl text-center text-lg md:text-xl text-brand-gray z-10 panel-text font-light leading-relaxed drop-shadow-md">Forging systems that withstand the test of time. A foundation built on the immutable laws of logic and design.</p>
+                </div>
+                <div class="story-panel w-full md:w-screen h-screen flex flex-col justify-center items-center shrink-0 border-b md:border-b-0 md:border-r border-brand-bg3/50 px-6 md:px-10 relative">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/story_3.png" alt="Story 3" class="w-full h-full object-cover opacity-20">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg2 via-brand-bg2/80 to-transparent"></div>
+                    </div>
+                    <h3 class="font-cinzel text-8xl md:text-[15rem] text-brand-bg3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-black z-0 pointer-events-none tracking-tighter mix-blend-overlay opacity-50">03</h3>
+                    <h2 class="font-cinzel text-4xl md:text-7xl text-white mb-6 z-10 panel-title text-center drop-shadow-lg">The Illusionist</h2>
+                    <p class="max-w-2xl text-center text-lg md:text-xl text-brand-gray z-10 panel-text font-light leading-relaxed drop-shadow-md">Weaving the threads of destiny through motion and pixels. Creating experiences that mesmerize and bind the mortal eye.</p>
+                </div>
+                <div class="story-panel w-full md:w-screen h-screen flex flex-col justify-center items-center shrink-0 border-b md:border-b-0 md:border-r border-brand-bg3/50 px-6 md:px-10 relative">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/story_4.png" alt="Story 4" class="w-full h-full object-cover opacity-20">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg2 via-brand-bg2/80 to-transparent"></div>
+                    </div>
+                    <h3 class="font-cinzel text-8xl md:text-[15rem] text-brand-bg3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-black z-0 pointer-events-none tracking-tighter mix-blend-overlay opacity-50">04</h3>
+                    <h2 class="font-cinzel text-4xl md:text-7xl text-white mb-6 z-10 panel-title text-center drop-shadow-lg">The Final Judge</h2>
+                    <p class="max-w-2xl text-center text-lg md:text-xl text-brand-gray z-10 panel-text font-light leading-relaxed drop-shadow-md">Unforgiving optimization. Code weighed on the scales of cosmic justice. Only the absolutely perfect survive.</p>
+                </div>
+                <div class="story-panel w-full md:w-screen h-screen flex flex-col justify-center items-center shrink-0 px-6 md:px-10 relative">
+                    <div class="absolute inset-0 z-0">
+                        <img src="assets/story_5.png" alt="Story 5" class="w-full h-full object-cover opacity-20">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg2 via-brand-bg2/80 to-transparent"></div>
+                    </div>
+                    <h3 class="font-cinzel text-8xl md:text-[15rem] text-brand-bg3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-black z-0 pointer-events-none tracking-tighter mix-blend-overlay opacity-50">05</h3>
+                    <h2 class="font-cinzel text-4xl md:text-7xl text-brand-gold mb-6 z-10 panel-title text-center drop-shadow-[0_0_15px_rgba(212,175,55,0.5)]">Eternal Legacy</h2>
+                    <p class="max-w-2xl text-center text-lg md:text-xl text-brand-gray z-10 panel-text font-light leading-relaxed drop-shadow-md">Systems that transcend the mortal coil. Leaving a digital footprint that echoes through eternity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Showcase -->
+        <section id="portfolio" class="py-32 md:py-48 bg-brand-bg1 relative z-10 border-t border-brand-bg3/50">
+            <div class="container mx-auto px-6">
+                <div class="mb-24 text-center portfolio-header">
+                    <h2 class="font-cinzel text-5xl md:text-7xl text-white tracking-[0.1em] section-title">The Book of Karma</h2>
+                    <div class="w-1 px-px h-16 bg-gradient-to-b from-brand-orange to-transparent mx-auto mt-10"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
+                    <!-- Card 1 -->
+                    <div class="portfolio-card group cursor-pointer mt-0 md:mt-24">
+                        <div class="overflow-hidden relative w-full aspect-[4/5] bg-brand-bg2 border border-brand-bg3 group-hover:border-brand-gold transition-colors duration-700 p-2">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-gold/5 via-brand-bg1 to-brand-bg1 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                            <div class="relative w-full h-full border border-brand-bg3/50 flex flex-col items-center justify-center z-10 p-8">
+                                <span class="font-cinzel text-brand-gray/30 text-8xl absolute top-4 right-8 font-black">I</span>
+                                <div class="text-center">
+                                    <h3 class="font-cinzel text-3xl md:text-4xl text-white group-hover:text-brand-gold transition-colors duration-500 mb-4 tracking-wider">Neural Divination</h3>
+                                    <div class="h-px w-12 bg-brand-gold mx-auto mb-4 group-hover:w-24 transition-all duration-500"></div>
+                                    <p class="text-brand-gray font-inter font-light tracking-widest uppercase text-sm">AI Systems / Architecture</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="portfolio-card group cursor-pointer">
+                        <div class="overflow-hidden relative w-full aspect-[4/5] bg-brand-bg2 border border-brand-bg3 group-hover:border-brand-crimson transition-colors duration-700 p-2">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-crimson/5 via-brand-bg1 to-brand-bg1 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                            <div class="relative w-full h-full border border-brand-bg3/50 flex flex-col items-center justify-center z-10 p-8">
+                                <span class="font-cinzel text-brand-gray/30 text-8xl absolute top-4 right-8 font-black">II</span>
+                                <div class="text-center">
+                                    <h3 class="font-cinzel text-3xl md:text-4xl text-white group-hover:text-brand-crimson transition-colors duration-500 mb-4 tracking-wider">Judgment UI</h3>
+                                    <div class="h-px w-12 bg-brand-crimson mx-auto mb-4 group-hover:w-24 transition-all duration-500"></div>
+                                    <p class="text-brand-gray font-inter font-light tracking-widest uppercase text-sm">SaaS Platform / Design</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="portfolio-card group cursor-pointer mt-0 md:mt-24">
+                        <div class="overflow-hidden relative w-full aspect-[4/5] bg-brand-bg2 border border-brand-bg3 group-hover:border-brand-orange transition-colors duration-700 p-2">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-orange/5 via-brand-bg1 to-brand-bg1 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                            <div class="relative w-full h-full border border-brand-bg3/50 flex flex-col items-center justify-center z-10 p-8">
+                                <span class="font-cinzel text-brand-gray/30 text-8xl absolute top-4 right-8 font-black">III</span>
+                                <div class="text-center">
+                                    <h3 class="font-cinzel text-3xl md:text-4xl text-white group-hover:text-brand-orange transition-colors duration-500 mb-4 tracking-wider">Temple of Code</h3>
+                                    <div class="h-px w-12 bg-brand-orange mx-auto mb-4 group-hover:w-24 transition-all duration-500"></div>
+                                    <p class="text-brand-gray font-inter font-light tracking-widest uppercase text-sm">Cinematic WebGL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="portfolio-card group cursor-pointer">
+                        <div class="overflow-hidden relative w-full aspect-[4/5] bg-brand-bg2 border border-brand-bg3 group-hover:border-white transition-colors duration-700 p-2">
+                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-brand-bg1 to-brand-bg1 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+                            <div class="relative w-full h-full border border-brand-bg3/50 flex flex-col items-center justify-center z-10 p-8">
+                                <span class="font-cinzel text-brand-gray/30 text-8xl absolute top-4 right-8 font-black">IV</span>
+                                <div class="text-center">
+                                    <h3 class="font-cinzel text-3xl md:text-4xl text-white group-hover:text-white transition-colors duration-500 mb-4 tracking-wider">Destiny Engine</h3>
+                                    <div class="h-px w-12 bg-white mx-auto mb-4 group-hover:w-24 transition-all duration-500"></div>
+                                    <p class="text-brand-gray font-inter font-light tracking-widest uppercase text-sm">Viral Marketing System</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-32 md:py-48 bg-brand-bg2 relative border-y border-brand-bg3/50 overflow-hidden text-center">
+            <div class="container mx-auto px-6 relative z-10">
+                <h2 class="font-cinzel text-5xl md:text-7xl text-brand-gray/50 tracking-[0.2em] uppercase section-title mb-24 drop-shadow-md">Weapons of Judgment</h2>
+                
+                <div class="flex flex-wrap justify-center gap-6 md:gap-10 max-w-5xl mx-auto">
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-orange/30 text-brand-orange font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-brand-orange/10 hover:border-brand-orange hover:shadow-[0_0_20px_rgba(255,106,0,0.3)] transition-all duration-500 backdrop-blur-sm cursor-default">Karmic Algorithms (AI)</span>
+                    
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-crimson/30 text-brand-crimson font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-brand-crimson/10 hover:border-brand-crimson hover:shadow-[0_0_20px_rgba(139,0,0,0.3)] transition-all duration-500 backdrop-blur-sm cursor-default">Immutable Systems</span>
+                    
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-gold/30 text-brand-gold font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-brand-gold/10 hover:border-brand-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-500 backdrop-blur-sm cursor-default">Illusion Weaving</span>
+                    
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-gray/50 text-white font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-white/10 hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-500 backdrop-blur-sm cursor-default">Cosmic Direction</span>
+                    
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-orange/30 text-brand-orange font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-brand-orange/10 hover:border-brand-orange hover:shadow-[0_0_20px_rgba(255,106,0,0.3)] transition-all duration-500 backdrop-blur-sm cursor-default">Destiny Automation</span>
+                    
+                    <span class="skill-badge px-8 py-4 bg-transparent border border-brand-crimson/30 text-brand-crimson font-cinzel tracking-[0.2em] uppercase text-sm md:text-base hover:bg-brand-crimson/10 hover:border-brand-crimson hover:shadow-[0_0_20px_rgba(139,0,0,0.3)] transition-all duration-500 backdrop-blur-sm cursor-default">Soul Storytelling</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Section -->
+        <section id="quote" class="h-[70vh] md:h-screen relative flex items-center justify-center bg-brand-bg1 overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-crimson/10 via-brand-bg1 to-brand-bg1 z-0"></div>
+            <h2 class="font-cinzel text-4xl md:text-7xl lg:text-8xl text-white tracking-widest text-center px-6 relative z-10 quote-text drop-shadow-[0_0_30px_rgba(139,0,0,0.5)] font-black uppercase leading-tight max-w-6xl mx-auto">
+                "In the end, only<br><span class="text-brand-orange">pixel-perfect justice</span> remains."
+            </h2>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-32 bg-brand-bg2 relative border-t border-brand-bg3/50">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="testimonial-card p-10 bg-brand-bg1 border border-brand-bg3 relative group overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                        <div class="font-cinzel text-brand-gold text-6xl mb-4 opacity-50 font-black">"</div>
+                        <p class="text-brand-gray font-inter font-light italic mb-8 leading-relaxed text-lg">A digital experience that transcends typical design. The mythological storytelling combined with flawless execution is unmatched.</p>
+                        <h4 class="font-cinzel text-white tracking-widest uppercase text-sm border-t border-brand-bg3 pt-6">Oracle Systems</h4>
+                    </div>
+                    <div class="testimonial-card p-10 bg-brand-bg1 border border-brand-bg3 relative group overflow-hidden lg:-translate-y-12">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                        <div class="font-cinzel text-brand-orange text-6xl mb-4 opacity-50 font-black">"</div>
+                        <p class="text-brand-gray font-inter font-light italic mb-8 leading-relaxed text-lg">He doesn't just build websites; he builds worlds. The attention to motion and atmosphere is truly cinematic.</p>
+                        <h4 class="font-cinzel text-white tracking-widest uppercase text-sm border-t border-brand-bg3 pt-6">Nexus Creative</h4>
+                    </div>
+                    <div class="testimonial-card p-10 bg-brand-bg1 border border-brand-bg3 relative group overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-crimson/5 to-transparent opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                        <div class="font-cinzel text-brand-crimson text-6xl mb-4 opacity-50 font-black">"</div>
+                        <p class="text-brand-gray font-inter font-light italic mb-8 leading-relaxed text-lg">The technical architecture is as solid as the visual aesthetics. A rare blend of engineering and deep artistic vision.</p>
+                        <h4 class="font-cinzel text-white tracking-widest uppercase text-sm border-t border-brand-bg3 pt-6">Deva Tech</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section id="cta" class="min-h-screen relative flex flex-col justify-center items-center text-center px-6 overflow-hidden bg-brand-bg1 border-t border-brand-bg3">
+            <div class="absolute inset-0 flex justify-center items-center opacity-30 pointer-events-none">
+                <div class="w-[300px] h-[300px] md:w-[800px] md:h-[800px] rounded-full border border-brand-orange/20 animate-spin-slow mix-blend-screen"></div>
+                <div class="absolute w-[200px] h-[200px] md:w-[600px] md:h-[600px] rounded-full border border-brand-crimson/30 animate-spin-slow-reverse mix-blend-screen"></div>
+                <div class="absolute w-[150px] h-[150px] md:w-[400px] md:h-[400px] rounded-full bg-brand-orange/10 blur-[80px] mix-blend-screen"></div>
+            </div>
+            
+            <h2 class="font-cinzel text-5xl md:text-8xl lg:text-9xl text-white font-black tracking-tighter mb-10 relative z-10 cta-title drop-shadow-2xl">Ready To Face<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-brand-crimson to-brand-gold filter drop-shadow-[0_0_15px_rgba(255,106,0,0.5)]">Your Destiny?</span></h2>
+            
+            <div class="flex flex-wrap gap-6 justify-center relative z-10 mt-6 cta-buttons">
+                <a href="#" class="px-12 py-5 bg-white text-brand-bg1 font-cinzel font-bold tracking-widest uppercase hover:bg-brand-gold transition-all duration-500 shadow-[0_0_30px_rgba(255,255,255,0.2)] text-sm">Submit Your Vision</a>
+                <a href="#hero" class="px-12 py-5 border border-brand-gray text-white font-cinzel font-bold tracking-widest uppercase hover:border-white hover:bg-white/5 transition-all duration-500 text-sm">Accept The Judgment</a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-16 bg-[#020202] border-t border-brand-bg3/80 text-center relative z-10">
+            <div class="container mx-auto px-6">
+                <h3 class="font-cinzel text-4xl tracking-[0.3em] text-white mb-8 font-black">YAMRAJ</h3>
+                <div class="w-48 h-px bg-gradient-to-r from-transparent via-brand-gold/50 to-transparent mx-auto mb-12"></div>
+                <div class="flex justify-center gap-10 mb-12 font-cinzel text-brand-gray tracking-widest text-sm uppercase">
+                    <a href="#" class="hover:text-brand-orange transition-colors duration-300">Twitter (X)</a>
+                    <a href="#" class="hover:text-brand-crimson transition-colors duration-300">LinkedIn</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors duration-300">GitHub</a>
+                </div>
+                <p class="font-inter text-brand-gray/40 text-sm font-light tracking-wider">© 2026 Yamraj. Architect of Digital Worlds. All Rights Reserved.</p>
+                <p class="font-cinzel text-brand-crimson/50 text-xs mt-6 tracking-[0.2em] uppercase">Not Here To Follow Trends. Here To Judge Them.</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- SplitType -->
+    <script src="https://unpkg.com/split-type"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
