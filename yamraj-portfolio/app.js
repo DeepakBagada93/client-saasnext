@@ -244,9 +244,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 7. GSAP Scroll Animations
 
-    // Horizontal Story Scroll (Only on desktop)
+    // Horizontal Story Scroll
     const storyPanels = gsap.utils.toArray('.story-panel');
-    if (window.innerWidth > 768 && storyPanels.length > 0) {
+    if (storyPanels.length > 0) {
         const horizontalTween = gsap.to(storyPanels, {
             xPercent: -100 * (storyPanels.length - 1),
             ease: "none",
@@ -272,24 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     trigger: panel,
                     containerAnimation: horizontalTween,
                     start: "left center+=200",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        });
-    } else {
-        // Mobile fallback animations
-        storyPanels.forEach((panel, i) => {
-            const title = panel.querySelector('.panel-title');
-            const text = panel.querySelector('.panel-text');
-            
-            gsap.from([title, text], {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                stagger: 0.2,
-                scrollTrigger: {
-                    trigger: panel,
-                    start: "top 70%",
                     toggleActions: "play none none reverse"
                 }
             });
